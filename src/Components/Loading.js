@@ -1,7 +1,7 @@
 const Loading = () => {
   return (
     <div className="loading">
-      <p>chargement . . . 💻</p>
+      <p className="tracking-in-expand">chargement . . . 💻</p>
     </div>
   );
 };

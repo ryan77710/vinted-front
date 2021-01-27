@@ -2,7 +2,10 @@ const HomeOfferItem = (props) => {
   const { offer } = props;
   // console.log(offer);
   return (
-    <div to={`/offer/${offer._id}`} className="homeOfferItem">
+    <div
+      to={`/offer/${offer._id}`}
+      className="homeOfferItem slide-in-elliptic-top-fwd "
+    >
       <div>
         <img
           src={offer.owner.account.avatar.url}
