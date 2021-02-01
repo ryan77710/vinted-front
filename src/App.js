@@ -4,6 +4,8 @@ import OfferPage from "./Pages/OfferPage";
 import Home from "./Pages/Home";
 import SignUpPage from "./Pages/SignUpPage";
 import LoginPage from "./Pages/LoginPage";
+import PublishPage from "./Pages/PublishPage";
+import PaymentPage from "./Pages/PaymentPage";
 import Header from "./Components/Header";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -17,7 +19,7 @@ import axios from "axios";
 library.add(faSearch, faChartLine, faSortNumericDown);
 
 function App() {
-  const token = "tt";
+  let token;
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [authToken, setAuthToken] = useState(
@@ -27,6 +29,12 @@ function App() {
   const [ordre, setOrdre] = useState(true);
   const [valueMin, setValueMin] = useState("");
   const [valueMax, setValueMax] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimite] = useState(100);
+
+  // redirection for PublishPage
+  const [redirect, setRedirect] = useState(false);
+
   const handleLogin = (token, user) => {
     Cookies.set("userToken", token, { expires: 1 });
     setAuthToken(token);
@@ -48,6 +56,14 @@ function App() {
     const value = event.target.value;
     setValueMax(value);
   };
+  const handlePageChange = (event) => {
+    const value = event.target.value;
+    setPage(value);
+  };
+  const handleLimitChange = (event) => {
+    const value = event.target.value;
+    setLimite(value);
+  };
 
   const handleLogOut = () => {
     Cookies.remove("userToken");
@@ -62,13 +78,13 @@ function App() {
     }
     const fetchData = async () => {
       const response = await axios.get(
-        `http://localhost:3100/offers?title=${title}&sort=${sort}&priceMin=${valueMin}&priceMax=${valueMax}`
+        `http://localhost:3100/offers?title=${title}&sort=${sort}&priceMin=${valueMin}&priceMax=${valueMax}&page=${page}&limit=${limit}`
       );
       setData(response.data);
       setIsLoading(false);
     };
     fetchData();
-  }, [title, ordre, valueMin, valueMax]);
+  }, [title, ordre, valueMin, valueMax, limit, page]);
   return (
     <div className="App">
       <Router>
@@ -85,17 +101,39 @@ function App() {
           handleValueMaxChange={handleValueMaxChange}
         />
         <Switch>
+          <Route exact path="/offer/publish">
+            <PublishPage
+              authToken={authToken}
+              redirect={redirect}
+              setRedirect={setRedirect}
+            ></PublishPage>
+          </Route>
           <Route exact path="/offer/:id">
             <OfferPage></OfferPage>
           </Route>
+
           <Route exact path="/user/signup">
             <SignUpPage handleLogin={handleLogin}></SignUpPage>
           </Route>
           <Route exact path="/user/login">
-            <LoginPage handleLogin={handleLogin}></LoginPage>
+            <LoginPage
+              handleLogin={handleLogin}
+              redirect={redirect}
+              setRedirect={setRedirect}
+            ></LoginPage>
+          </Route>
+          <Route exact path="/paymentPage">
+            <PaymentPage></PaymentPage>
           </Route>
           <Route exact path="/">
-            <Home isLoading={isLoading} data={data}></Home>
+            <Home
+              isLoading={isLoading}
+              data={data}
+              limit={limit}
+              handleLimitChange={handleLimitChange}
+              page={page}
+              handlePageChange={handlePageChange}
+            ></Home>
           </Route>
         </Switch>
       </Router>

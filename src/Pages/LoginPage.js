@@ -3,7 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 const LoginPage = (props) => {
   const history = useHistory();
-  const { handleLogin } = props;
+  const { handleLogin, redirect, setRedirect } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,7 +19,12 @@ const LoginPage = (props) => {
       const token = response.data.token;
       const user = response.data.account.username;
       handleLogin(token, user);
-      history.push("/");
+      if (redirect) {
+        history.push("/offer/publish");
+        setRedirect(false);
+      } else {
+        history.push("/");
+      }
     } catch (error) {
       console.log(error.message);
       alert("mission fail sniff || retry to connect");

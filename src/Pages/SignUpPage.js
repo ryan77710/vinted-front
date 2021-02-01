@@ -8,7 +8,7 @@ const SignUpPage = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
-  const [picture, setPicture] = useState(null);
+  const [picture, setPicture] = useState({});
   let [fileHide, setFileHide] = useState(true);
 
   const handleNameChange = (event) => {
@@ -28,37 +28,40 @@ const SignUpPage = (props) => {
     setNumber(value);
   };
   const handlePictureChange = (event) => {
-    console.log(event.target.files);
-    const value = event.target.files[0];
+    setPicture(event.target.files[0]);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const data = {
-        email: email,
-        username: name,
-        password: password,
-        phone: number,
-      };
-      console.log(data);
-      const response = await axios.post("http://localhost:3100/user/signup", {
-        email: email,
-        password: password,
-        username: name,
-        phone: number,
-      });
-      console.log(response);
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("username", name);
+      formData.append("password", password);
+      formData.append("phone", number);
+      formData.append("pictureup", picture);
+      const response = await axios.post(
+        "http://localhost:3100/user/signup",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(formData);
       const token = response.data.token;
       const user = response.data.account.username;
       handleLogin(token, user);
       history.push("/");
     } catch (error) {
       console.log(error.message);
+      alert(error.response.data.message);
     }
   };
+  let anim;
   const showPicture = () => {
-    let calc = (fileHide = !fileHide);
-    setFileHide(calc);
+    anim = "flip-in-ver-right";
+    setFileHide(false);
   };
   return (
     <div className="SignUpPage">
@@ -94,12 +97,12 @@ const SignUpPage = (props) => {
             <b>choisissez une image de profile</b>
           </div>
         ) : (
-          <div className="file">
+          <div className="file flip-in-ver-right">
             <input
               type="file"
-              accept="image/*"
               placeholder="photo de profil"
               onClick={showPicture}
+              onChange={handlePictureChange}
             />
           </div>
         )}

@@ -5,6 +5,7 @@ const HomeOfferItem = (props) => {
     <div
       to={`/offer/${offer._id}`}
       className="homeOfferItem slide-in-elliptic-top-fwd "
+      style={{ animationDelay: props.time }}
     >
       <div>
         <img

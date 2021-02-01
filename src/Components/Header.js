@@ -1,6 +1,7 @@
 import vintedLogo from "../assets/img/vinted-logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
+import debounce from "debounce";
 
 const Header = (props) => {
   const {
@@ -17,7 +18,7 @@ const Header = (props) => {
   } = props;
   let history = useHistory();
   return (
-    <header className="scale-out-hor-left">
+    <header className="vibrate-1">
       <img onClick={() => history.push("/")} src={vintedLogo} alt="vinted" />
       <div>
         <div className="search">
@@ -62,7 +63,9 @@ const Header = (props) => {
       </div>
 
       {authToken ? (
-        <button onClick={handleLogOut}>Se déconnecter</button>
+        <button className="log-out-color" onClick={handleLogOut}>
+          Se déconnecter
+        </button>
       ) : (
         <>
           <button onClick={() => history.push("/user/signup")}>
@@ -74,7 +77,9 @@ const Header = (props) => {
         </>
       )}
 
-      <button>Vends tes articles</button>
+      <button onClick={() => history.push("/offer/publish")}>
+        Vends tes articles
+      </button>
       <div className="scale-out-hor-right"></div>
     </header>
   );

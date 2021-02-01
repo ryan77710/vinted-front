@@ -2,8 +2,10 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "../Components/Loading";
+import { useHistory } from "react-router-dom";
 
 const OfferPage = (props) => {
+  const history = useHistory();
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
@@ -64,7 +66,19 @@ const OfferPage = (props) => {
                   />
                   <span>{data.owner.account.username}</span>
                 </div>
-                <button>Acheter</button>
+                <button
+                  onClick={() =>
+                    history.push("/paymentPage", {
+                      name: data.product_name,
+                      product_picture: data.product_image.url,
+                      price: data.product_price,
+                      username: data.owner.account.username,
+                      userpicture: data.owner.account.avatar.url,
+                    })
+                  }
+                >
+                  Acheter
+                </button>
               </div>
             </div>
           </main>
