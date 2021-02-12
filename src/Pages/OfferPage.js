@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "../Components/Loading";
 import { useHistory } from "react-router-dom";
+import LoginPage from "../Pages/LoginPage";
 
-const OfferPage = (props) => {
+const OfferPage = ({ authToken, handleLogin }) => {
   const history = useHistory();
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -18,6 +21,29 @@ const OfferPage = (props) => {
     };
     fetchData();
   }, [id]);
+
+  const handlePayclick = () => {
+    if (authToken) {
+      history.push("/paymentPage", {
+        name: data.product_name,
+        product_picture: data.product_image.url,
+        price: data.product_price,
+        username: data.owner.account.username,
+        userpicture: data.owner.account.avatar.url,
+        description: data.product_description,
+      });
+    } else {
+      console.log(id);
+      alert("Connectez-vous pour acheter un produit");
+      setShowLogin(true);
+    }
+  };
+  // const copy = id;
+  const handleCloseclick = () => {
+    setShowLogin(false);
+    // history.go(0) pour rafraichir la page
+    console.log(showLogin);
+  };
   return (
     <>
       {isLoading === true ? (
@@ -26,7 +52,15 @@ const OfferPage = (props) => {
         <div className="OfferPage">
           <main>
             <div>
-              <img src={data.product_image.url} alt={data.produc_name} />
+              <img src={data.product_image.url} alt={data.product_name} />
+              {data.product_picture.map((pic, index) => {
+                return (
+                  <img
+                    src={data.product_picture[index].url}
+                    alt={data.produc_name}
+                  />
+                );
+              })}
             </div>
             <div className="Offer-page-detail">
               <div>
@@ -66,22 +100,18 @@ const OfferPage = (props) => {
                   />
                   <span>{data.owner.account.username}</span>
                 </div>
-                <button
-                  onClick={() =>
-                    history.push("/paymentPage", {
-                      name: data.product_name,
-                      product_picture: data.product_image.url,
-                      price: data.product_price,
-                      username: data.owner.account.username,
-                      userpicture: data.owner.account.avatar.url,
-                    })
-                  }
-                >
-                  Acheter
-                </button>
+                <button onClick={handlePayclick}>Acheter</button>
               </div>
             </div>
           </main>
+          {showLogin === false ? (
+            ""
+          ) : (
+            <div className="Unauthorized">
+              <LoginPage handleLogin={handleLogin}></LoginPage>
+              <button onClick={handleCloseclick}>Fermer</button>
+            </div>
+          )}
         </div>
       )}
     </>

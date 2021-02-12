@@ -16,6 +16,8 @@ import {
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 library.add(faSearch, faChartLine, faSortNumericDown);
 
 function App() {
@@ -34,7 +36,8 @@ function App() {
 
   // redirection for PublishPage
   const [redirect, setRedirect] = useState(false);
-
+  // chek for payment way
+  // ?
   const handleLogin = (token, user) => {
     Cookies.set("userToken", token, { expires: 1 });
     setAuthToken(token);
@@ -85,57 +88,67 @@ function App() {
     };
     fetchData();
   }, [title, ordre, valueMin, valueMax, limit, page]);
+  const publicKey =
+    "pk_test_51IFvF7LU3nUcxY4gi3B0nGBBlRmtyU3R3OHkCAMUjDgCQ5i6gPWwBf4xcHXMziAqWhpfSDBZ3neJMKhUEUClx2kJ009iRtBTz4";
+  const stripePromise = loadStripe(publicKey);
+
   return (
     <div className="App">
       <Router>
-        <Header
-          handleLogOut={handleLogOut}
-          authToken={authToken}
-          handleTitle={handleTitle}
-          title={title}
-          handleOrdreChange={handleOrdreChange}
-          ordre={ordre}
-          valueMin={valueMin}
-          valueMax={valueMax}
-          handleValueMinChange={handleValueMinChange}
-          handleValueMaxChange={handleValueMaxChange}
-        />
-        <Switch>
-          <Route exact path="/offer/publish">
-            <PublishPage
-              authToken={authToken}
-              redirect={redirect}
-              setRedirect={setRedirect}
-            ></PublishPage>
-          </Route>
-          <Route exact path="/offer/:id">
-            <OfferPage></OfferPage>
-          </Route>
+        <Elements stripe={stripePromise}>
+          <Header
+            handleLogOut={handleLogOut}
+            authToken={authToken}
+            handleTitle={handleTitle}
+            title={title}
+            handleOrdreChange={handleOrdreChange}
+            ordre={ordre}
+            valueMin={valueMin}
+            valueMax={valueMax}
+            handleValueMinChange={handleValueMinChange}
+            handleValueMaxChange={handleValueMaxChange}
+          />
+          <Switch>
+            <Route exact path="/offer/publish">
+              <PublishPage
+                authToken={authToken}
+                redirect={redirect}
+                setRedirect={setRedirect}
+              ></PublishPage>
+            </Route>
+            <Route exact path="/offer/:id">
+              <OfferPage
+                authToken={authToken}
+                handleLogin={handleLogin}
+              ></OfferPage>
+            </Route>
 
-          <Route exact path="/user/signup">
-            <SignUpPage handleLogin={handleLogin}></SignUpPage>
-          </Route>
-          <Route exact path="/user/login">
-            <LoginPage
-              handleLogin={handleLogin}
-              redirect={redirect}
-              setRedirect={setRedirect}
-            ></LoginPage>
-          </Route>
-          <Route exact path="/paymentPage">
-            <PaymentPage></PaymentPage>
-          </Route>
-          <Route exact path="/">
-            <Home
-              isLoading={isLoading}
-              data={data}
-              limit={limit}
-              handleLimitChange={handleLimitChange}
-              page={page}
-              handlePageChange={handlePageChange}
-            ></Home>
-          </Route>
-        </Switch>
+            <Route exact path="/user/signup">
+              <SignUpPage handleLogin={handleLogin}></SignUpPage>
+            </Route>
+            <Route exact path="/user/login">
+              <LoginPage
+                handleLogin={handleLogin}
+                redirect={redirect}
+                setRedirect={setRedirect}
+                red={"/"}
+              ></LoginPage>
+            </Route>
+            <Route exact path="/paymentPage">
+              <PaymentPage authToken={authToken}></PaymentPage>
+            </Route>
+            <Route exact path="/">
+              <Home
+                isLoading={isLoading}
+                data={data}
+                limit={limit}
+                handleLimitChange={handleLimitChange}
+                page={page}
+                handlePageChange={handlePageChange}
+              ></Home>
+            </Route>
+          </Switch>
+        </Elements>
       </Router>
     </div>
   );

@@ -58,9 +58,9 @@ const SignUpPage = (props) => {
       alert(error.response.data.message);
     }
   };
-  let anim;
+  // let anim;
   const showPicture = () => {
-    anim = "flip-in-ver-right";
+    // anim = "flip-in-ver-right";
     setFileHide(false);
   };
   return (

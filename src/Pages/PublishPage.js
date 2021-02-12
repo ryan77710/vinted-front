@@ -64,94 +64,100 @@ const PublishPage = ({ authToken, redirect, setRedirect }) => {
     }
   };
   return (
-    <div className="PublishPage">
-      <h2>Vends ton article</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <div>
-            <input type="file" onChange={handleFileChange} />
-          </div>
+    <>
+      {authToken ? (
+        <div className="PublishPage">
+          <h2>Vends ton article</h2>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <div>
+                <input type="file" onChange={handleFileChange} />
+              </div>
+            </div>
+            <div>
+              <label>
+                <p>Titre</p>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={handleTitleChange}
+                  placeholder="ex : jolie manteau de l'akatsuki "
+                />
+              </label>
+              <label>
+                <p>Décris ton article</p>
+                <textarea
+                  value={description}
+                  onChange={handleDescriptionChange}
+                  placeholder="un peu d'inpiration !!"
+                ></textarea>
+              </label>
+              <label>
+                <p>Taille</p>
+                <input
+                  type="text"
+                  value={size}
+                  onChange={handleSizeChange}
+                  placeholder="ex : taille S"
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                <p>Ville</p>
+                <input
+                  type="text"
+                  value={city}
+                  onChange={handleCityChange}
+                  placeholder="ex : Konoha"
+                />
+              </label>
+              <label>
+                <p>Marque</p>
+                <input
+                  type="text"
+                  value={brand}
+                  onChange={handleBrandChange}
+                  placeholder="ex : écrivez la marque"
+                />
+              </label>
+              <label>
+                <p>État</p>
+                <input
+                  type="text"
+                  value={condition}
+                  onChange={handleConditionChange}
+                  placeholder="ex : très bonne état"
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                <p>Couleur</p>
+                <input
+                  type="text"
+                  value={color}
+                  onChange={handleColorChange}
+                  placeholder="ex : noir et rouge"
+                />
+              </label>
+              <label>
+                <p>Prix</p>
+                <input
+                  type="text"
+                  value={price}
+                  onChange={handlePriceChange}
+                  placeholder="0.00€"
+                />
+              </label>
+            </div>
+            <button type="submit">Ajouter</button>
+          </form>
         </div>
-        <div>
-          <label>
-            <p>Titre</p>
-            <input
-              type="text"
-              value={title}
-              onChange={handleTitleChange}
-              placeholder="ex : jolie manteau de l'akatsuki "
-            />
-          </label>
-          <label>
-            <p>Décris ton article</p>
-            <textarea
-              value={description}
-              onChange={handleDescriptionChange}
-              placeholder="un peu d'inpiration !!"
-            ></textarea>
-          </label>
-          <label>
-            <p>Taille</p>
-            <input
-              type="text"
-              value={size}
-              onChange={handleSizeChange}
-              placeholder="ex : taille S"
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            <p>Ville</p>
-            <input
-              type="text"
-              value={city}
-              onChange={handleCityChange}
-              placeholder="ex : Konoha"
-            />
-          </label>
-          <label>
-            <p>Marque</p>
-            <input
-              type="text"
-              value={brand}
-              onChange={handleBrandChange}
-              placeholder="ex : écrivez la marque"
-            />
-          </label>
-          <label>
-            <p>État</p>
-            <input
-              type="text"
-              value={condition}
-              onChange={handleConditionChange}
-              placeholder="ex : très bonne état"
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            <p>Couleur</p>
-            <input
-              type="text"
-              value={color}
-              onChange={handleColorChange}
-              placeholder="ex : noir et rouge"
-            />
-          </label>
-          <label>
-            <p>Prix</p>
-            <input
-              type="text"
-              value={price}
-              onChange={handlePriceChange}
-              placeholder="0.00€"
-            />
-          </label>
-        </div>
-        <button type="submit">Ajouter</button>
-      </form>
-    </div>
+      ) : (
+        "Vous dever être connecter pour vendre des produits "
+      )}
+    </>
   );
 };
 

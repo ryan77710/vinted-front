@@ -1,60 +1,107 @@
-import { useLocation } from "react-router-dom";
-const PaymentPage = () => {
-  const location = useLocation();
-  const {
-    name,
-    price,
-    product_picture,
-    userpicture,
-    username,
-  } = location.state;
-  let total = Number(price) + 1.2;
-  return (
-    <div className="PaymentPage">
-      <div>
-        <img
-          src={product_picture}
-          alt={name}
-          className="kenburns-top-left"
-          title="nous nous excusons pour la qualité de certaines images "
-        />
-      </div>
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { useLocation, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import axios from "axios";
 
-      <form>
-        <div className="résumé">
-          <span className="résumé-img">
-            Résumé de la commande de :
-            <img src={userpicture} alt={username} />
-            {username}
-          </span>
+const PaymentPage = ({ authToken }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const location = useLocation();
+  const { name, price, product_picture, userpicture, username, description } =
+    location.state || {};
+  const [succeeded, setSucceeded] = useState(false);
+  const history = useHistory();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log(name);
+    const cardElement = elements.getElement(CardElement);
+    const stripeResponse = await stripe.createToken(cardElement, {
+      name: username,
+    });
+    console.log(stripeResponse);
+    const stripeToken = stripeResponse.token.id;
+
+    const response = await axios.post(
+      "http://localhost:3100/payment",
+      {
+        stripeToken,
+        description: description,
+        price: price,
+      },
+      { headers: { Authorization: `Bearer ${authToken}` } }
+    );
+    console.log(response.data);
+    if ((response.data.status = "succeeded")) {
+      setSucceeded(true);
+    } else {
+      alert("une erreur c'est produite réesseryé ");
+    }
+  };
+
+  let total = Number(price) + 1.2;
+
+  return (
+    <>
+      {!succeeded ? (
+        <div className="PaymentPage">
           <div>
-            <p>Commande</p>
-            <span>{price} €</span>
+            <img
+              src={product_picture}
+              alt={name}
+              className="kenburns-top-left"
+              title="nous nous excusons pour la qualité de certaines images "
+            />
           </div>
-          <div>
-            <p>Frais protection acheteurs</p>
-            <span>0,40 €</span>
-          </div>
-          <div>
-            <p>Frais de port</p>
-            <span>0,80 €</span>
+          <form onSubmit={handleSubmit}>
+            <div className="résumé">
+              <span className="résumé-img">
+                Résumé de la commande de :
+                <img src={userpicture} alt={username} />
+                {username}
+              </span>
+              <div>
+                <p>Commande</p>
+                <span>{price.toFixed(2)} €</span>
+              </div>
+              <div>
+                <p>Frais protection acheteurs</p>
+                <span>0,40 €</span>
+              </div>
+              <div>
+                <p>Frais de port</p>
+                <span>0,80 €</span>
+              </div>
+            </div>
+            <div className="total">
+              <div>
+                <p>Total</p>
+                <span>{total.toFixed(2)} €</span>
+              </div>
+              <p>
+                Il ne vous reste plus qu'une étape pour vous offrir{" "}
+                <b>{name}</b>.
+                <br />
+                Vous allez payer <b>{total.toFixed(2)} €</b> (frais de
+                protection et frais de port inclus).
+              </p>
+            </div>
+            <CardElement className="payment-card"></CardElement>
+            <button type="submit">Pay</button>
+          </form>
+        </div>
+      ) : (
+        <div className="PaymentPage pay-accept">
+          <div className="bounce-in-top">
+            <span>
+              Félicitation {username} le payment de {price} € a été éfectué 😎
+            </span>
+            <button onClick={() => history.push("/")}>
+              Cliquez ici pour revenir a la page principale
+            </button>
           </div>
         </div>
-        <div className="total">
-          <div>
-            <p>Total</p>
-            <span>{total} €</span>
-          </div>
-          <p>
-            Il ne vous reste plus qu'une étape pour vous offrir <b>{name}</b>.
-            <br />
-            Vous allez payer <b>{total} €</b> (frais de protection et frais de
-            port inclus).
-          </p>
-        </div>
-        <button>Pay</button>
-      </form>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 const LoginPage = (props) => {
   const history = useHistory();
-  const { handleLogin, redirect, setRedirect } = props;
+  const { handleLogin, redirect, setRedirect, red } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,7 +23,7 @@ const LoginPage = (props) => {
         history.push("/offer/publish");
         setRedirect(false);
       } else {
-        history.push("/");
+        history.push(red);
       }
     } catch (error) {
       console.log(error.message);
@@ -39,7 +39,7 @@ const LoginPage = (props) => {
     setPassword(value);
   };
   return (
-    <div className="LoginPage">
+    <div className={` LoginPage `}>
       <form onSubmit={handleSubmit}>
         <h2>Se connecter</h2>
         <input
