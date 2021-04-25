@@ -1,0 +1,17 @@
+.Drawer {
+  box-sizing: border-box;
+  background-color: transparent;
+  background-color: khaki;
+  position: fixed;
+  width: 25vw;
+  height: 100vh;
+  z-index: 800;
+  color: blue;
+  transform: translate(-100vw);
+  transition: 1s;
+  border: 1px solid red;
+  border-radius: 0px 15px 15px 0px;
+}
+.Drawer-active {
+  transform: translate(0px);
+}

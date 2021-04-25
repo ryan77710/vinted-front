@@ -1,24 +1,41 @@
+import { useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import OfferPage from "./Pages/OfferPage";
-import Home from "./Pages/Home";
-import SignUpPage from "./Pages/SignUpPage";
-import LoginPage from "./Pages/LoginPage";
-import PublishPage from "./Pages/PublishPage";
-import PaymentPage from "./Pages/PaymentPage";
-import Header from "./Components/Header";
+
+import OfferPage from "./Pages/OfferPage/OfferPage";
+import Home from "./Pages/Home/Home";
+import SignUpPage from "./Pages/LoginAndSignUpPage/SignUpPage";
+import LoginPage from "./Pages/LoginAndSignUpPage/LoginPage";
+import PublishPage from "./Pages/PublishPage/PublishPage";
+import PaymentPage from "./Pages/PaymentPage/PaymentPage";
+import Header from "./Components/Header/Header";
+import Drawer from "./Components/Drawer/Drawer";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faSearch,
   faChartLine,
   faSortNumericDown,
+  faImages,
+  faBars,
+  faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+
 import Cookies from "js-cookie";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-library.add(faSearch, faChartLine, faSortNumericDown);
+import { useDebounce } from "use-debounce";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+library.add(
+  faSearch,
+  faChartLine,
+  faSortNumericDown,
+  faImages,
+  faBars,
+  faTimesCircle
+);
 
 function App() {
   let token;
@@ -27,19 +44,27 @@ function App() {
   const [authToken, setAuthToken] = useState(
     Cookies.get("userToken", token) || null
   );
+
+  const [showDrawer, setShowDrawer] = useState(false);
+
   const [title, setTitle] = useState("");
-  const [ordre, setOrdre] = useState(true);
-  const [valueMin, setValueMin] = useState("");
-  const [valueMax, setValueMax] = useState("");
+  const [titleDebouced] = useDebounce(title, 1000);
+  const [toggleOrder, setToggleOrder] = useState(true);
+
+  const [priceValue, setPriceValue] = useState([0, 3000]);
   const [page, setPage] = useState(1);
   const [limit, setLimite] = useState(100);
+
+  const [stripePromise] = useState(() =>
+    loadStripe(process.env.REACT_APP_STRIPEKEY)
+  );
 
   // redirection for PublishPage
   const [redirect, setRedirect] = useState(false);
   // chek for payment way
   // ?
   const handleLogin = (token, user) => {
-    Cookies.set("userToken", token, { expires: 1 });
+    Cookies.set("userToken", token, { expires: 7 });
     setAuthToken(token);
     alert(`bonjour ${user}`);
   };
@@ -47,18 +72,7 @@ function App() {
     const value = event.target.value;
     setTitle(value);
   };
-  const handleOrdreChange = () => {
-    const value = !ordre;
-    setOrdre(value);
-  };
-  const handleValueMinChange = (event) => {
-    const value = event.target.value;
-    setValueMin(value);
-  };
-  const handleValueMaxChange = (event) => {
-    const value = event.target.value;
-    setValueMax(value);
-  };
+
   const handlePageChange = (event) => {
     const value = event.target.value;
     setPage(value);
@@ -73,82 +87,88 @@ function App() {
     setAuthToken(null);
   };
   useEffect(() => {
-    let sort;
-    if (ordre === true) {
-      sort = "price-asc";
-    } else {
-      sort = "price-desc";
-    }
     const fetchData = async () => {
       const response = await axios.get(
-        `http://localhost:3100/offers?title=${title}&sort=${sort}&priceMin=${valueMin}&priceMax=${valueMax}&page=${page}&limit=${limit}`
+        `${process.env.REACT_APP_API_URL}offers?title=${titleDebouced}&sort=${
+          toggleOrder ? "price-asc" : "price-desc"
+        }&priceMin=${priceValue[0]}&priceMax=${
+          priceValue[1]
+        }&page=${page}&limit=${limit}`
       );
       setData(response.data);
       setIsLoading(false);
     };
     fetchData();
-  }, [title, ordre, valueMin, valueMax, limit, page]);
-  const publicKey =
-    "pk_test_51IFvF7LU3nUcxY4gi3B0nGBBlRmtyU3R3OHkCAMUjDgCQ5i6gPWwBf4xcHXMziAqWhpfSDBZ3neJMKhUEUClx2kJ009iRtBTz4";
-  const stripePromise = loadStripe(publicKey);
+  }, [titleDebouced, toggleOrder, priceValue, limit, page]);
 
   return (
     <div className="App">
+      <button
+        title="Ouvrir le navigateur"
+        className={`btest ${showDrawer && "btest-isActive"}`}
+        onClick={() => setShowDrawer(!showDrawer)}
+      >
+        <FontAwesomeIcon
+          icon={showDrawer ? "times-circle" : "bars"}
+          className={`icon-drawer ${showDrawer && "icon-isActive"}`}
+          inverse
+          spin
+        />
+      </button>
       <Router>
-        <Elements stripe={stripePromise}>
-          <Header
-            handleLogOut={handleLogOut}
-            authToken={authToken}
-            handleTitle={handleTitle}
-            title={title}
-            handleOrdreChange={handleOrdreChange}
-            ordre={ordre}
-            valueMin={valueMin}
-            valueMax={valueMax}
-            handleValueMinChange={handleValueMinChange}
-            handleValueMaxChange={handleValueMaxChange}
-          />
-          <Switch>
-            <Route exact path="/offer/publish">
-              <PublishPage
-                authToken={authToken}
-                redirect={redirect}
-                setRedirect={setRedirect}
-              ></PublishPage>
-            </Route>
-            <Route exact path="/offer/:id">
-              <OfferPage
-                authToken={authToken}
-                handleLogin={handleLogin}
-              ></OfferPage>
-            </Route>
+        <Drawer showDrawer={showDrawer} setShowDrawer={setShowDrawer} />
+        <Header
+          handleLogOut={handleLogOut}
+          authToken={authToken}
+          handleTitle={handleTitle}
+          title={title}
+          toggleOrder={toggleOrder}
+          setToggleOrder={setToggleOrder}
+          priceValue={priceValue}
+          setPriceValue={setPriceValue}
+        />
+        <Switch>
+          <Route exact path="/offer/publish">
+            <PublishPage
+              authToken={authToken}
+              redirect={redirect}
+              setRedirect={setRedirect}
+            ></PublishPage>
+          </Route>
+          <Route exact path="/offer/:id">
+            <OfferPage
+              authToken={authToken}
+              handleLogin={handleLogin}
+            ></OfferPage>
+          </Route>
 
-            <Route exact path="/user/signup">
-              <SignUpPage handleLogin={handleLogin}></SignUpPage>
-            </Route>
-            <Route exact path="/user/login">
-              <LoginPage
-                handleLogin={handleLogin}
-                redirect={redirect}
-                setRedirect={setRedirect}
-                red={"/"}
-              ></LoginPage>
-            </Route>
-            <Route exact path="/paymentPage">
-              <PaymentPage authToken={authToken}></PaymentPage>
-            </Route>
-            <Route exact path="/">
-              <Home
-                isLoading={isLoading}
-                data={data}
-                limit={limit}
-                handleLimitChange={handleLimitChange}
-                page={page}
-                handlePageChange={handlePageChange}
-              ></Home>
-            </Route>
-          </Switch>
-        </Elements>
+          <Route exact path="/user/signup">
+            <SignUpPage handleLogin={handleLogin}></SignUpPage>
+          </Route>
+          <Route exact path="/user/login">
+            <LoginPage
+              handleLogin={handleLogin}
+              redirect={redirect}
+              setRedirect={setRedirect}
+              red={"/"}
+            ></LoginPage>
+          </Route>
+          <Route exact path="/paymentPage">
+            <Elements stripe={stripePromise}>
+              <PaymentPage authToken={authToken} />
+            </Elements>
+          </Route>
+          <Route exact path="/">
+            <Home
+              isLoading={isLoading}
+              data={data}
+              limit={limit}
+              handleLimitChange={handleLimitChange}
+              page={page}
+              handlePageChange={handlePageChange}
+            ></Home>
+          </Route>
+        </Switch>
       </Router>
     </div>
   );

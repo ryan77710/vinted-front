@@ -1,6 +1,6 @@
-import HomeOfferItem from "../Components/home/HomeOfferItem";
 import { useHistory } from "react-router-dom";
-import Loading from "../Components/Loading";
+import Loading from "../../Components/Loading";
+import HomeOfferItem from "../../Components/HomeOfferItem";
 
 const Home = (props) => {
   let history = useHistory();

@@ -1,0 +1,129 @@
+.SignUpPage,
+.LoginPage {
+  margin-top: 55px;
+
+  display: flex;
+  justify-content: center;
+}
+.SignUpPage form,
+.LoginPage form {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+}
+.SignUpPage h2,
+.LoginPage h2 {
+  font-size: 25px;
+  text-align: center;
+}
+.SignUpPage input[type="text"],
+.SignUpPage input[type="number"],
+.SignUpPage input[type="email"],
+.LoginPage input[type="email"],
+.LoginPage input[type="password"],
+.SignUpPage input[type="password"],
+.LoginPage input[type="text"],
+.SignUpPage input[type="file"] {
+  margin-top: 30px;
+  height: 30px;
+  outline: none;
+  border: none;
+  border-bottom: rgb(243, 186, 186) solid 1px;
+  display: flex;
+  align-items: flex-end;
+  font-size: 15px;
+}
+.SignUpPage input[type="file"] {
+  border: none;
+  align-items: center;
+  font-size: 14px;
+}
+.SignUpPage .file {
+  margin-top: 5px;
+  color: white;
+  background-color: var(--blue-color);
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+/* animation picture */
+.flip-in-ver-right {
+  -webkit-animation: flip-in-ver-right 3s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: flip-in-ver-right 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes flip-in-ver-right {
+  0% {
+    -webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+@keyframes flip-in-ver-right {
+  0% {
+    -webkit-transform: rotateY(-190deg);
+    transform: rotateY(-190deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+
+.SignUpPage div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: initial;
+}
+.SignUpPage .chek {
+  margin-top: 20px;
+}
+
+.SignUpPage input[type="checkbox"] {
+  margin-right: 15px;
+
+  width: 23px;
+  height: 23px;
+  cursor: pointer;
+}
+.SignUpPage label {
+  font-size: 18px;
+}
+
+.SignUpPage p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: rgb(175, 175, 175);
+}
+.SignUpPage button,
+.LoginPage button {
+  margin-top: 47px;
+  height: 47px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--blue-color);
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  outline: none;
+}
+.SignUpPage span,
+.LoginPage span {
+  margin-top: 17px;
+  color: var(--blue-color);
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}

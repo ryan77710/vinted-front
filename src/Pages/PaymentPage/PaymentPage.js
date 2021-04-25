@@ -10,31 +10,38 @@ const PaymentPage = ({ authToken }) => {
   const { name, price, product_picture, userpicture, username, description } =
     location.state || {};
   const [succeeded, setSucceeded] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(name);
     const cardElement = elements.getElement(CardElement);
     const stripeResponse = await stripe.createToken(cardElement, {
       name: username,
     });
-    console.log(stripeResponse);
-    const stripeToken = stripeResponse.token.id;
 
-    const response = await axios.post(
-      "http://localhost:3100/payment",
-      {
-        stripeToken,
-        description: description,
-        price: price,
-      },
-      { headers: { Authorization: `Bearer ${authToken}` } }
-    );
-    console.log(response.data);
-    if ((response.data.status = "succeeded")) {
-      setSucceeded(true);
+    if (!stripeResponse.token) {
+      setErrorMessage(stripeResponse.error.message);
     } else {
-      alert("une erreur c'est produite réesseryé ");
+      const stripeToken = stripeResponse.token.id;
+      try {
+        const response = await axios.post(
+          "http://localhost:3100/payment",
+          {
+            stripeToken,
+            description: description,
+            price: price,
+          },
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        console.log(response);
+        if ((response.data.status = "succeeded")) {
+          setSucceeded(true);
+        } else {
+          alert("une erreur c'est produite réesseryé ");
+        }
+      } catch (error) {
+        alert("une erreur c'est produite réesseryé ");
+      }
     }
   };
 
@@ -85,7 +92,8 @@ const PaymentPage = ({ authToken }) => {
                 protection et frais de port inclus).
               </p>
             </div>
-            <CardElement className="payment-card"></CardElement>
+            <CardElement className="payment-card" />
+            {errorMessage && <b className="error-message">{errorMessage}</b>}
             <button type="submit">Pay</button>
           </form>
         </div>

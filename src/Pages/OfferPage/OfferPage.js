@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Loading from "../Components/Loading";
+import Loading from "../../Components/Loading";
 import { useHistory } from "react-router-dom";
-import LoginPage from "../Pages/LoginPage";
+
+import LoginPage from "../LoginAndSignUpPage/LoginPage";
 
 const OfferPage = ({ authToken, handleLogin }) => {
   const history = useHistory();
@@ -38,10 +39,8 @@ const OfferPage = ({ authToken, handleLogin }) => {
       setShowLogin(true);
     }
   };
-  // const copy = id;
   const handleCloseclick = () => {
     setShowLogin(false);
-    // history.go(0) pour rafraichir la page
     console.log(showLogin);
   };
   return (

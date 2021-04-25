@@ -1,7 +1,9 @@
-import vintedLogo from "../assets/img/vinted-logo.png";
+import vintedLogo from "../../assets/img/vinted-logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
-import debounce from "debounce";
+
+import RangeSlider from "./RangeSlider";
+import Switch from "@material-ui/core/Switch";
 
 const Header = (props) => {
   const {
@@ -9,13 +11,12 @@ const Header = (props) => {
     handleLogOut,
     handleTitle,
     title,
-    handleOrdreChange,
-    ordre,
-    handleValueMaxChange,
-    handleValueMinChange,
-    valueMin,
-    valueMax,
+    toggleOrder,
+    setToggleOrder,
+    priceValue,
+    setPriceValue,
   } = props;
+
   let history = useHistory();
   return (
     <header className="vibrate-1">
@@ -32,32 +33,26 @@ const Header = (props) => {
         </div>
         <div className="option">
           <div>
-            {ordre ? (
-              <button onClick={handleOrdreChange}>
-                <span>trier par ordre croissant </span>
-                <FontAwesomeIcon icon="chart-line" />
-              </button>
+            {toggleOrder ? (
+              <p>Trier par ordre croissant</p>
             ) : (
-              <button onClick={handleOrdreChange}>
-                <span>trier par ordre décroissant </span>
-                <FontAwesomeIcon icon="sort-numeric-down" />
-              </button>
+              <p>Trier par ordre décroissant</p>
             )}
+            <Switch
+              checked={toggleOrder}
+              onClick={() => setToggleOrder(!toggleOrder)}
+            />
           </div>
           <div>
-            <label>prix minimum : </label>
-            <input
-              type="number"
-              value={valueMin}
-              onChange={handleValueMinChange}
+            <p>
+              Prix min : {priceValue[0]} €
+              <br />
+              Prix max : {priceValue[1]} €
+            </p>
+            <RangeSlider
+              priceValue={priceValue}
+              setPriceValue={setPriceValue}
             />
-            €<label>prix maximum : </label>
-            <input
-              type="number"
-              value={valueMax}
-              onChange={handleValueMaxChange}
-            />
-            €
           </div>
         </div>
       </div>

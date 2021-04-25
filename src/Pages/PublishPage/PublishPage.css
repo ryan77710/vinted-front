@@ -1,0 +1,133 @@
+.PublishPage {
+  background-color: rgb(238, 238, 238);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.PublishPage h2,
+.PublishPage form {
+  width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+.PublishPage h2 {
+  margin-top: 30px;
+  font-size: 25px;
+}
+
+.PublishPage form > div {
+  margin-bottom: 25px;
+  background-color: rgb(255, 255, 255);
+}
+.PublishPage form > div:first-child {
+  position: relative;
+  height: 285px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: initial;
+  box-sizing: border-box;
+  padding: 25px;
+}
+.PublishPage form .multiple-files-icon {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  cursor: pointer;
+}
+.PublishPage form .multiple-files-icon span {
+  margin-left: 5px;
+  color: grey;
+}
+.PublishPage form .multiple-files-icon span:hover {
+  color: var(--blue-color);
+}
+.PublishPage form .caroussel-picture {
+  display: flex;
+  overflow-y: scroll;
+  justify-content: flex-start;
+}
+.PublishPage form .caroussel-pic-img {
+  height: 100%;
+  max-width: 200px;
+  min-width: 200px;
+  cursor: pointer;
+}
+.PublishPage form .caroussel-pic-img:hover {
+  transition: 2s;
+  transform: scale(1.5);
+}
+.PublishPage form .picture-modal {
+  position: absolute;
+  width: 60vw;
+  height: 60vh;
+  cursor: pointer;
+  object-fit: contain;
+}
+.PublishPage form > div > div {
+  border: dashed 1px var(--blue-color);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.PublishPage form > div > div > section {
+  height: 235px;
+  width: 100%;
+  background-repeat: repeat;
+  background-size: auto 100%;
+}
+/* below its the dropZone  */
+.PublishPage form > div > div > section > div {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  cursor: copy;
+}
+
+.PublishPage form > div:first-child div label {
+  width: inherit;
+  max-width: 300px;
+  cursor: pointer;
+}
+
+.PublishPage label {
+  border-bottom: 1px solid rgb(180, 180, 180);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 25px;
+  font-size: 18px;
+}
+
+.PublishPage input,
+.PublishPage textarea {
+  border: none;
+  border-bottom: 1px solid lightgrey;
+  width: 460px;
+  outline: none;
+  font-size: 17px;
+}
+.PublishPage textarea {
+  height: 100px;
+}
+.PublishPage input:focus,
+.PublishPage textarea:focus {
+  border-bottom: 1px solid var(--blue-color);
+}
+.PublishPage button[type="submit"] {
+  height: 40px;
+  width: 150px;
+  background-color: var(--blue-color);
+  outline: none;
+  border: none;
+  color: white;
+  margin-bottom: 60px;
+  cursor: pointer;
+}
