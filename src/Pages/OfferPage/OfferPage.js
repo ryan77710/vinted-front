@@ -5,6 +5,7 @@ import Loading from "../../Components/Loading";
 import { useHistory } from "react-router-dom";
 
 import LoginPage from "../LoginAndSignUpPage/LoginPage";
+import CarouselPicture from "../../Components/CarouselPicture";
 
 const OfferPage = ({ authToken, handleLogin }) => {
   const history = useHistory();
@@ -50,7 +51,7 @@ const OfferPage = ({ authToken, handleLogin }) => {
       ) : (
         <div className="OfferPage">
           <main>
-            <div>
+            {/* <div>
               <img src={data.product_image.url} alt={data.product_name} />
               {data.product_picture.map((pic, index) => {
                 return (
@@ -60,7 +61,14 @@ const OfferPage = ({ authToken, handleLogin }) => {
                   />
                 );
               })}
-            </div>
+            </div> */}
+            {/* <div> */}
+            <CarouselPicture
+              picture={data.product_image.url}
+              pictures={data.product_picture}
+            />
+            {/* </div> */}
+
             <div className="Offer-page-detail">
               <div>
                 <div>{data.product_price} €</div>

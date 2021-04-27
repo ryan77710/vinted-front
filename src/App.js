@@ -10,6 +10,14 @@ import PublishPage from "./Pages/PublishPage/PublishPage";
 import PaymentPage from "./Pages/PaymentPage/PaymentPage";
 import Header from "./Components/Header/Header";
 import Drawer from "./Components/Drawer/Drawer";
+import About from "./Pages/About/About";
+import Contact from "./Pages/Contact/Contact";
+import Donation from "./Pages/Donation/Donation";
+import Favors from "./Pages/Favors/Favors";
+import Messages from "./Pages/Messages/Messages";
+import Offers from "./Pages/Offers/Offers";
+import Profile from "./Pages/Profile/Profile";
+import Support from "./Pages/Support/Support";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -18,7 +26,19 @@ import {
   faSortNumericDown,
   faImages,
   faBars,
+  faSpinner,
   faTimesCircle,
+  faHeartbeat,
+  faCommentDots,
+  faUser,
+  faExclamationCircle,
+  faHandHoldingMedical,
+  faAdjust,
+  faEnvelope,
+  faDonate,
+  faPowerOff,
+  faChevronDown,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Cookies from "js-cookie";
@@ -34,7 +54,19 @@ library.add(
   faSortNumericDown,
   faImages,
   faBars,
-  faTimesCircle
+  faTimesCircle,
+  faHome,
+  faSpinner,
+  faHeartbeat,
+  faCommentDots,
+  faUser,
+  faExclamationCircle,
+  faHandHoldingMedical,
+  faAdjust,
+  faEnvelope,
+  faDonate,
+  faPowerOff,
+  faChevronDown
 );
 
 function App() {
@@ -116,7 +148,11 @@ function App() {
         />
       </button>
       <Router>
-        <Drawer showDrawer={showDrawer} setShowDrawer={setShowDrawer} />
+        <Drawer
+          showDrawer={showDrawer}
+          setShowDrawer={setShowDrawer}
+          handleLogOut={handleLogOut}
+        />
         <Header
           handleLogOut={handleLogOut}
           authToken={authToken}
@@ -135,13 +171,24 @@ function App() {
               setRedirect={setRedirect}
             ></PublishPage>
           </Route>
+          <Route exact path="/offer/my-offers">
+            <Offers />
+          </Route>
+          <Route exact path="/offer/favors">
+            <Favors />
+          </Route>
           <Route exact path="/offer/:id">
             <OfferPage
               authToken={authToken}
               handleLogin={handleLogin}
             ></OfferPage>
           </Route>
-
+          <Route exact path="/user/messages">
+            <Messages />
+          </Route>
+          <Route exact path="/user/profile">
+            <Profile />
+          </Route>
           <Route exact path="/user/signup">
             <SignUpPage handleLogin={handleLogin}></SignUpPage>
           </Route>
@@ -153,10 +200,23 @@ function App() {
               red={"/"}
             ></LoginPage>
           </Route>
+          <Route exact path="/payment/donation">
+            <Donation />
+          </Route>
           <Route exact path="/paymentPage">
             <Elements stripe={stripePromise}>
               <PaymentPage authToken={authToken} />
             </Elements>
+          </Route>
+          <Route exact path="/contact">
+            <Contact />
+          </Route>
+
+          <Route exact path="/support">
+            <Support />
+          </Route>
+          <Route exact path="/about">
+            <About />
           </Route>
           <Route exact path="/">
             <Home
