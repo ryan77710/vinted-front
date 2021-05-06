@@ -39,6 +39,9 @@ import {
   faPowerOff,
   faChevronDown,
   faHome,
+  faTrashAlt,
+  faEdit,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Cookies from "js-cookie";
@@ -66,12 +69,16 @@ library.add(
   faEnvelope,
   faDonate,
   faPowerOff,
-  faChevronDown
+  faChevronDown,
+  faTrashAlt,
+  faEdit,
+  faStar
 );
 
 function App() {
   let token;
   const [data, setData] = useState();
+
   const [isLoading, setIsLoading] = useState(true);
   const [authToken, setAuthToken] = useState(
     Cookies.get("userToken", token) || null
@@ -118,26 +125,69 @@ function App() {
     Cookies.remove("userToken");
     setAuthToken(null);
   };
+
+  const handleFavoriteClick = async (offer) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}offer/favorite`,
+        offer,
+        { headers: { Authorization: `Bearer ${authToken}` } }
+      );
+      const tab = [...data.offers];
+
+      tab.map((dataOffer) => {
+        if (dataOffer._id === offer._id) {
+          dataOffer.favorite = !offer.favorite;
+        }
+        return "";
+      });
+
+      setData({ count: data.count, offers: tab });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}offers?title=${titleDebouced}&sort=${
-          toggleOrder ? "price-asc" : "price-desc"
-        }&priceMin=${priceValue[0]}&priceMax=${
-          priceValue[1]
-        }&page=${page}&limit=${limit}`
-      );
-      setData(response.data);
-      setIsLoading(false);
+      let response;
+      try {
+        if (authToken) {
+          response = await axios.get(
+            `${
+              process.env.REACT_APP_API_URL
+            }offers-auth?title=${titleDebouced}&sort=${
+              toggleOrder ? "price-asc" : "price-desc"
+            }&priceMin=${priceValue[0]}&priceMax=${
+              priceValue[1]
+            }&page=${page}&limit=${limit}`,
+
+            { headers: { Authorization: `Bearer ${authToken}` } }
+          );
+        } else {
+          response = await axios.get(
+            `${
+              process.env.REACT_APP_API_URL
+            }offers?title=${titleDebouced}&sort=${
+              toggleOrder ? "price-asc" : "price-desc"
+            }&priceMin=${priceValue[0]}&priceMax=${
+              priceValue[1]
+            }&page=${page}&limit=${limit}`
+          );
+        }
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error.message);
+      }
     };
     fetchData();
-  }, [titleDebouced, toggleOrder, priceValue, limit, page]);
+  }, [titleDebouced, toggleOrder, priceValue, limit, page, authToken]);
 
   return (
     <div className="App">
       <button
         title="Ouvrir le navigateur"
-        className={`btest ${showDrawer && "btest-isActive"}`}
+        className={`buttton-drawer ${showDrawer && "buttton-drawer-isActive"}`}
         onClick={() => setShowDrawer(!showDrawer)}
       >
         <FontAwesomeIcon
@@ -172,10 +222,10 @@ function App() {
             ></PublishPage>
           </Route>
           <Route exact path="/offer/my-offers">
-            <Offers />
+            <Offers authToken={authToken} />
           </Route>
           <Route exact path="/offer/favors">
-            <Favors />
+            <Favors authToken={authToken} />
           </Route>
           <Route exact path="/offer/:id">
             <OfferPage
@@ -187,7 +237,7 @@ function App() {
             <Messages />
           </Route>
           <Route exact path="/user/profile">
-            <Profile />
+            <Profile authToken={authToken} />
           </Route>
           <Route exact path="/user/signup">
             <SignUpPage handleLogin={handleLogin}></SignUpPage>
@@ -201,7 +251,9 @@ function App() {
             ></LoginPage>
           </Route>
           <Route exact path="/payment/donation">
-            <Donation />
+            <Elements stripe={stripePromise}>
+              <Donation />
+            </Elements>
           </Route>
           <Route exact path="/paymentPage">
             <Elements stripe={stripePromise}>
@@ -220,6 +272,7 @@ function App() {
           </Route>
           <Route exact path="/">
             <Home
+              handleFavoriteClick={handleFavoriteClick}
               isLoading={isLoading}
               data={data}
               limit={limit}

@@ -1,6 +1,7 @@
 import { useHistory } from "react-router-dom";
 import Loading from "../../Components/Loading";
 import HomeOfferItem from "../../Components/HomeOfferItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Home = (props) => {
   let history = useHistory();
@@ -9,6 +10,7 @@ const Home = (props) => {
     data,
     page,
     limit,
+    handleFavoriteClick,
     handleLimitChange,
     handlePageChange,
   } = props;
@@ -33,20 +35,28 @@ const Home = (props) => {
             </div>
             <div className="container-offer">
               {data.offers.map((offer) => {
-                counteur += 0.17;
+                counteur += 0.02;
                 return (
                   <HomeOfferItem
+                    className="slide-in-elliptic-top-fwd"
                     time={String(counteur) + "s"}
                     key={offer._id}
                     offer={offer}
                     onClick={() => history.push(`/offer/${offer._id}`)}
-                  ></HomeOfferItem>
+                  >
+                    <FontAwesomeIcon
+                      onClick={() => handleFavoriteClick(offer)}
+                      icon="heartbeat"
+                      className="favorite"
+                      color={offer.favorite === true ? "#ff006a" : "lightgrey"}
+                    />
+                  </HomeOfferItem>
                 );
               })}
             </div>
           </main>
           <div className="limit-page">
-            <label> page:</label>{" "}
+            <label> page:</label>
             <input type="number" value={page} onChange={handlePageChange} />
             <label>nombre de publication:</label>
             <input type="number" value={limit} onChange={handleLimitChange} />

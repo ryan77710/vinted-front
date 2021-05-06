@@ -13,7 +13,7 @@
   border: solid 5px rgb(0, 255, 255);
 }
 
-.btest {
+.buttton-drawer {
   position: fixed;
   top: 50vh;
   right: 15px;
@@ -25,10 +25,10 @@
   opacity: 0.2;
   transition: 0.5s;
 }
-.btest:hover {
+.buttton-drawer:hover {
   opacity: inherit;
 }
-.btest-isActive {
+.buttton-drawer-isActive {
   opacity: inherit;
 }
 .icon-drawer {
@@ -79,3 +79,10 @@
 @import "./Pages/PublishPage/PublishPage.css";
 @import "./Pages/PaymentPage/PaymentPage.css";
 @import "./Components//Drawer/Drawer.css";
+@import "./Pages/Support/Support.css";
+@import "./Pages/About/About.css";
+@import "./Pages//Contact/Contact.css";
+@import "./Pages//Offers/Offers.css";
+@import "./Pages//Donation/Donation.css";
+@import "./Pages//Profile/Profile.css";
+@import "./Pages//Favors/Favors.css";

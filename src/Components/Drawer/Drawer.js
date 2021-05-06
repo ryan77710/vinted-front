@@ -10,7 +10,12 @@ const Drawer = (props) => {
       className={`Drawer ${showDrawer ? "Drawer-active" : `Drawer-exit`}`}
     >
       <ul>
-        <li onClick={() => history.push("/")}>
+        <li
+          onClick={() => {
+            history.push("/");
+            history.go();
+          }}
+        >
           <FontAwesomeIcon className="iconLi" icon="home" />
           <span>Accueil</span>
           <div className="iconHide"></div>
@@ -30,7 +35,7 @@ const Drawer = (props) => {
         </li>
         <li onClick={() => history.push("/offer/favors")}>
           <FontAwesomeIcon className="iconLi" icon="heartbeat" />
-          <span>Favories</span>
+          <span>Favoris</span>
           <div className="iconHide"></div>
           <b></b>
         </li>

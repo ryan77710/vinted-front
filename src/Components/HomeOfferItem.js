@@ -1,10 +1,8 @@
 const HomeOfferItem = (props) => {
-  const { offer } = props;
-  // console.log(offer);
+  const { offer, className } = props;
   return (
     <div
-      to={`/offer/${offer._id}`}
-      className="homeOfferItem slide-in-elliptic-top-fwd "
+      className={`homeOfferItem ${className} `}
       style={{ animationDelay: props.time }}
     >
       <div>
@@ -19,6 +17,7 @@ const HomeOfferItem = (props) => {
         <strong> {offer.product_price} €</strong>
         <p>{offer.product_details[1].TAILLE}</p>
         <p>{offer.product_details[0].MARQUE}</p>
+        {props.children}
       </div>
     </div>
   );

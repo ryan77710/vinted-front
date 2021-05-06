@@ -59,6 +59,7 @@
   margin-bottom: 30px;
   outline: none;
   text-decoration: none;
+  position: relative;
 }
 .slide-in-elliptic-top-fwd {
   -webkit-animation: slide-in-elliptic-top-fwd 3.7s
@@ -127,10 +128,18 @@
 }
 .homeOfferItem > div:nth-child(3) {
   margin-top: 13px;
+  position: relative;
 }
 .homeOfferItem > div:nth-child(3) strong {
   font-size: 15px;
   color: black;
+}
+.homeOfferItem .favorite {
+  position: absolute;
+  top: -15px;
+  right: 5px;
+  font-size: 25px;
+  cursor: pointer;
 }
 .home .limit-page {
   display: flex;

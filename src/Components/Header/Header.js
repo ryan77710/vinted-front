@@ -20,7 +20,14 @@ const Header = (props) => {
   let history = useHistory();
   return (
     <header className="vibrate-1">
-      <img onClick={() => history.push("/")} src={vintedLogo} alt="vinted" />
+      <img
+        onClick={() => {
+          history.push("/");
+          history.go();
+        }}
+        src={vintedLogo}
+        alt="vinted"
+      />
       <div>
         <div className="search">
           <FontAwesomeIcon icon="search" />

@@ -6,15 +6,20 @@
   align-items: center;
 }
 .PaymentPage > div {
-  margin-top: 15px;
+  /* margin-top: 15px; */
   overflow: hidden;
   border-radius: 3%;
   margin-right: 30px;
+  /* width: 350px;
+  height: 400px; */
 }
 
 .PaymentPage > div img {
-  width: 500px;
-  height: 500px;
+  /* width: 500px;
+  height: 400px; */
+  /* height: 100%;
+  width: 100%; */
+
   object-fit: contain;
   object-position: center;
 }
@@ -132,6 +137,7 @@
   background-color: rgb(51, 197, 107);
   color: white;
   border-radius: 5px;
+  cursor: pointer;
 }
 .PaymentPage .total > p {
   box-sizing: border-box;

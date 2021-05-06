@@ -10,7 +10,6 @@ const ShowPicture = ({ files }) => {
             key={index}
             onClick={() => {
               setPictureModal(URL.createObjectURL(file));
-              console.log(pictureModal);
             }}
             src={URL.createObjectURL(file)}
             alt="clothes"

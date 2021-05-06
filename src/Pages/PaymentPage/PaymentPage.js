@@ -25,7 +25,7 @@ const PaymentPage = ({ authToken }) => {
       const stripeToken = stripeResponse.token.id;
       try {
         const response = await axios.post(
-          "http://localhost:3100/payment",
+          `${process.env.REACT_APP_API_URL}payment`,
           {
             stripeToken,
             description: description,

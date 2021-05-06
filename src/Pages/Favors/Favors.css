@@ -1,0 +1,53 @@
+.Favors {
+  max-width: 1225px;
+  min-height: 87vh;
+  margin: 30px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.Favors .offer {
+  height: 400px;
+  width: 237px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  border: 1px solid rgb(0, 0, 0);
+  margin-bottom: 15px;
+  position: relative;
+  overflow: hidden;
+}
+.Favors .offer img {
+  height: 360px;
+  width: 237px;
+  border-radius: 100px 15px 100px 0px;
+  object-fit: cover;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.Favors .offer p {
+  margin-top: 5px;
+  font-size: 17px;
+  font-weight: bold;
+}
+.Favors .empty-container {
+  font-weight: bold;
+  font-size: 22px;
+}
+.Favors .star-icon {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 17px;
+  cursor: pointer;
+}
+.Favors > p {
+  color: var(--blue-color);
+  font-size: 4vw;
+}

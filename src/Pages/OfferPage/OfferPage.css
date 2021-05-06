@@ -58,14 +58,13 @@
     var(--blue-color),
     transparent,
     transparent,
-    rgb(255, 0, 106)
+    #ff006a
   );
   border-radius: 0px 0px 13px 13px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 30px;
-  color: aliceblue;
 }
 
 #logo:hover {
@@ -102,7 +101,6 @@
 .Offer-page-detail > div:nth-child(2) {
   box-sizing: border-box;
   padding-top: 50px;
-  height: 311 px;
   font-size: 20px;
   display: flex;
   flex-direction: column;

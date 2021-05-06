@@ -34,9 +34,9 @@ SwiperCore.use([
   EffectCube,
 ]);
 
-const CarouselPicture = ({ pictures, picture }) => {
+const CarouselPicture = ({ pictures, picture, favorite, iconOnClick }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  // const [controlledSwiper, setControlledSwiper] = useState(null);
+
   const slides = pictures.map((picture, index) => (
     <SwiperSlide key={index}>
       <img src={picture.url} alt="ok" />
@@ -53,19 +53,13 @@ const CarouselPicture = ({ pictures, picture }) => {
       <Swiper
         effect="cube"
         id="picture"
-        // autoplay
         thumbs={{ swiper: thumbsSwiper }}
         spaceBetween={0}
         slidesPerView={1}
         navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log("slide change")}
       >
-        <SwiperSlide>
-          <img src={picture} alt="ok" />
-        </SwiperSlide>
         {slides}
       </Swiper>
       <Swiper
@@ -77,7 +71,12 @@ const CarouselPicture = ({ pictures, picture }) => {
         {thumbs}
       </Swiper>
       <div id="logo">
-        <FontAwesomeIcon icon="heartbeat" title="Ajouter au favories" />{" "}
+        <FontAwesomeIcon
+          onClick={iconOnClick}
+          color={favorite ? "#ff006a" : "lightgrey"}
+          icon="heartbeat"
+          title="Ajouter au favories"
+        />
       </div>
     </div>
   );

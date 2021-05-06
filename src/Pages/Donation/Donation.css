@@ -1,0 +1,56 @@
+.Donation {
+  min-height: 84vh;
+  background-color: rgb(241, 239, 239);
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+.Donation > form {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  box-sizing: border-box;
+  padding: 25px;
+  min-height: 600px;
+}
+
+.Donation > form > h2 {
+  font-size: 35px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--blue-color);
+  text-decoration: underline;
+}
+.Donation span {
+  font-size: 20px;
+  font-weight: bold;
+}
+.Donation b {
+  color: green;
+}
+.Donation > form > div {
+  width: 400px;
+  height: 30px;
+  border: 1px solid lightblue;
+  box-sizing: border-box;
+  border-radius: 40px;
+  padding: 5px;
+}
+.Donation button {
+  height: 50px;
+  width: 400px;
+  background-color: rgb(116, 231, 116);
+  outline: none;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.Donation button:hover {
+  background-color: black;
+  color: wheat;
+}

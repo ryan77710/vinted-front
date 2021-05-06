@@ -40,7 +40,7 @@ const SignUpPage = (props) => {
       formData.append("phone", number);
       formData.append("pictureup", picture);
       const response = await axios.post(
-        "http://localhost:3100/user/signup",
+        `${process.env.REACT_APP_API_URL}user/signup`,
         formData,
         {
           headers: {

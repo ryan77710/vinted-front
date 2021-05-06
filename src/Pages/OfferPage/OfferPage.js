@@ -17,12 +17,38 @@ const OfferPage = ({ authToken, handleLogin }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`http://localhost:3100/offer/${id}`);
+      let response;
+      if (authToken) {
+        response = await axios.get(
+          `${process.env.REACT_APP_API_URL}offer-auth/${id}`,
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+      } else {
+        response = await axios.get(
+          `${process.env.REACT_APP_API_URL}offer/${id}`
+        );
+      }
+      console.log(response.data);
       setData(response.data);
       setIsLoading(false);
     };
     fetchData();
-  }, [id]);
+  }, [id, authToken]);
+  const handleFavOfferClick = async (offer) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}offer/favorite`,
+        data,
+        { headers: { Authorization: `Bearer ${authToken}` } }
+      );
+      const newData = { ...data };
+      newData.favorite = !data.favorite;
+
+      setData(newData);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const handlePayclick = () => {
     if (authToken) {
@@ -35,14 +61,12 @@ const OfferPage = ({ authToken, handleLogin }) => {
         description: data.product_description,
       });
     } else {
-      console.log(id);
       alert("Connectez-vous pour acheter un produit");
       setShowLogin(true);
     }
   };
   const handleCloseclick = () => {
     setShowLogin(false);
-    console.log(showLogin);
   };
   return (
     <>
@@ -51,23 +75,12 @@ const OfferPage = ({ authToken, handleLogin }) => {
       ) : (
         <div className="OfferPage">
           <main>
-            {/* <div>
-              <img src={data.product_image.url} alt={data.product_name} />
-              {data.product_picture.map((pic, index) => {
-                return (
-                  <img
-                    src={data.product_picture[index].url}
-                    alt={data.produc_name}
-                  />
-                );
-              })}
-            </div> */}
-            {/* <div> */}
             <CarouselPicture
               picture={data.product_image.url}
               pictures={data.product_picture}
+              favorite={data.favorite}
+              iconOnClick={handleFavOfferClick}
             />
-            {/* </div> */}
 
             <div className="Offer-page-detail">
               <div>
@@ -115,7 +128,7 @@ const OfferPage = ({ authToken, handleLogin }) => {
             ""
           ) : (
             <div className="Unauthorized">
-              <LoginPage handleLogin={handleLogin}></LoginPage>
+              <LoginPage color="red" handleLogin={handleLogin}></LoginPage>
               <button onClick={handleCloseclick}>Fermer</button>
             </div>
           )}

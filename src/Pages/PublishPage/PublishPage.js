@@ -49,7 +49,7 @@ const PublishPage = ({ authToken, redirect, setRedirect }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3100/offer/publish",
+        `${process.env.REACT_APP_API_URL}offer/publish`,
         formData,
         {
           headers: {

@@ -9,12 +9,14 @@ const LoginPage = (props) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ email, password });
     try {
-      const response = await axios.post("http://localhost:3100/user/login", {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}user/login`,
+        {
+          email: email,
+          password: password,
+        }
+      );
       console.log(response);
       const token = response.data.token;
       const user = response.data.account.username;
