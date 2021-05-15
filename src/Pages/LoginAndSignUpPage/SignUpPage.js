@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
+
 const SignUpPage = (props) => {
   let history = useHistory();
   const { handleLogin } = props;
@@ -8,7 +10,7 @@ const SignUpPage = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
-  const [picture, setPicture] = useState({});
+  const [picture, setPicture] = useState(false);
   let [fileHide, setFileHide] = useState(true);
 
   const handleNameChange = (event) => {
@@ -33,34 +35,37 @@ const SignUpPage = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("username", name);
-      formData.append("password", password);
-      formData.append("phone", number);
-      formData.append("pictureup", picture);
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}user/signup`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log(formData);
-      const token = response.data.token;
-      const user = response.data.account.username;
-      handleLogin(token, user);
-      history.push("/");
+      if (email && name && password && number && picture) {
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("username", name);
+        formData.append("password", password);
+        formData.append("phone", number);
+        formData.append("pictureup", picture);
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}user/signup`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        const token = response.data.token;
+        const user = response.data.account.username;
+        handleLogin(token, user);
+        history.push("/");
+        toast.success("Compte créer");
+      } else {
+        toast.error("Champ vide ou incorrect");
+      }
     } catch (error) {
-      console.log(error.message);
-      alert(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
-  // let anim;
+
   const showPicture = () => {
-    // anim = "flip-in-ver-right";
     setFileHide(false);
   };
   return (

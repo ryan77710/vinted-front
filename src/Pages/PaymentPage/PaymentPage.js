@@ -1,7 +1,9 @@
-import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-import { useLocation, useHistory } from "react-router-dom";
 import React, { useState } from "react";
+import { useLocation, useHistory } from "react-router-dom";
+
 import axios from "axios";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { toast } from "react-toastify";
 
 const PaymentPage = ({ authToken }) => {
   const stripe = useStripe();
@@ -12,6 +14,7 @@ const PaymentPage = ({ authToken }) => {
   const [succeeded, setSucceeded] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const cardElement = elements.getElement(CardElement);
@@ -21,6 +24,7 @@ const PaymentPage = ({ authToken }) => {
 
     if (!stripeResponse.token) {
       setErrorMessage(stripeResponse.error.message);
+      toast.error(stripeResponse.error.message);
     } else {
       const stripeToken = stripeResponse.token.id;
       try {
@@ -33,14 +37,14 @@ const PaymentPage = ({ authToken }) => {
           },
           { headers: { Authorization: `Bearer ${authToken}` } }
         );
-        console.log(response);
         if ((response.data.status = "succeeded")) {
           setSucceeded(true);
+          toast.success("Produit acheté");
         } else {
-          alert("une erreur c'est produite réesseryé ");
+          toast.error("une erreur c'est produite réesseryé ");
         }
       } catch (error) {
-        alert("une erreur c'est produite réesseryé ");
+        toast.error(error.message);
       }
     }
   };

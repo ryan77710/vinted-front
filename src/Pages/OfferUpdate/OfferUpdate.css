@@ -1,0 +1,199 @@
+.OfferUpdate {
+  width: 70vw;
+  min-height: 85vh;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  box-sizing: border-box;
+  padding: 20px;
+}
+.OfferUpdate .container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  border: 1px solid var(--blue-color);
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.OfferUpdate .container .chevron-down {
+  color: rgb(255, 0, 106);
+  margin-left: 20px;
+  cursor: pointer;
+}
+.OfferUpdate .product-image {
+  box-sizing: border-box;
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 1px solid lightgrey;
+}
+.OfferUpdate .product-image label {
+  box-sizing: border-box;
+  border: 1px solid var(--blue-color);
+  padding: 10px;
+  border-radius: 5px;
+  color: var(--blue-color);
+  cursor: pointer;
+}
+.OfferUpdate .product-image label:hover {
+  color: aliceblue;
+  background-color: var(--blue-color);
+}
+.OfferUpdate .product-image img {
+  width: 200px;
+  height: 200px;
+}
+
+.OfferUpdate .picture-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  border-bottom: 1px solid lightgrey;
+}
+.OfferUpdate .picture-container div {
+  position: relative;
+  margin-bottom: 15px;
+}
+.OfferUpdate .icon-delete {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+}
+.OfferUpdate .icon-delete:hover {
+  color: red;
+}
+.OfferUpdate .picture-container img {
+  width: 200px;
+  height: 200px;
+}
+.OfferUpdate .picture-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.OfferUpdate .picture-add label {
+  box-sizing: border-box;
+  border: 1px solid var(--blue-color);
+  padding: 10px;
+  border-radius: 5px;
+  color: var(--blue-color);
+  cursor: pointer;
+}
+.OfferUpdate .picture-add label:hover {
+  color: aliceblue;
+  background-color: var(--blue-color);
+}
+.OfferUpdate form {
+  width: 100%;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.OfferUpdate form label {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 30px;
+  min-height: 50px;
+  transition: 1.5s;
+}
+.OfferUpdate form label:hover {
+  background-color: lightgray;
+}
+.OfferUpdate form label p {
+  min-height: 30px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+  box-sizing: border-box;
+  background-color: var(--blue-color);
+  border-left: 1px solid rgb(255, 255, 255);
+  border-right: 1px solid rgb(255, 255, 255);
+
+  border-radius: 5px;
+}
+.OfferUpdate form label input {
+  width: 300px;
+  height: 25px;
+  color: rgb(255, 0, 106);
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  text-align: center;
+  border: 1px solid rgb(255, 0, 106);
+}
+/* color for placeholder imput */
+.OfferUpdate form label input::placeholder {
+  color: var(--blue-color);
+}
+
+.OfferUpdate form label input:-ms-input-placeholder {
+  color: var(--blue-color);
+}
+
+.OfferUpdate form label input::-ms-input-placeholder {
+  color: var(--blue-color);
+}
+.OfferUpdate form label textarea {
+  width: 300px;
+  max-width: 300px;
+  max-height: 150px;
+  color: rgb(255, 0, 106);
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  text-align: center;
+  border: 1px solid rgb(255, 0, 106);
+}
+
+/* color for placeholder text area */
+.OfferUpdate form label textarea::-webkit-input-placeholder {
+  color: var(--blue-color);
+}
+
+.OfferUpdate form label textarea:-moz-placeholder {
+  color: var(--blue-color);
+}
+
+.OfferUpdate form label textarea::-moz-placeholder {
+  color: var(--blue-color);
+}
+
+.OfferUpdate form label textarea:-ms-input-placeholder {
+  color: var(--blue-color);
+}
+.OfferUpdate form button {
+  margin-top: 30px;
+  height: 30px;
+  width: 200px;
+  outline: none;
+  border: rgb(255, 0, 106) 1px solid;
+  background-color: transparent;
+  border-radius: 5px;
+  color: rgb(255, 0, 106);
+  cursor: pointer;
+}
+.OfferUpdate form button:hover {
+  background-color: rgb(255, 0, 106);
+  color: aliceblue;
+}

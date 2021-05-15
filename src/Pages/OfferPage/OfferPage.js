@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 
 import LoginPage from "../LoginAndSignUpPage/LoginPage";
 import CarouselPicture from "../../Components/CarouselPicture";
+import { toast } from "react-toastify";
 
 const OfferPage = ({ authToken, handleLogin }) => {
   const history = useHistory();
@@ -28,25 +29,29 @@ const OfferPage = ({ authToken, handleLogin }) => {
           `${process.env.REACT_APP_API_URL}offer/${id}`
         );
       }
-      console.log(response.data);
       setData(response.data);
       setIsLoading(false);
     };
     fetchData();
   }, [id, authToken]);
   const handleFavOfferClick = async (offer) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}offer/favorite`,
-        data,
-        { headers: { Authorization: `Bearer ${authToken}` } }
-      );
-      const newData = { ...data };
-      newData.favorite = !data.favorite;
+    if (authToken) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}offer/favorite`,
+          data,
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        const newData = { ...data };
+        newData.favorite = !data.favorite;
 
-      setData(newData);
-    } catch (error) {
-      console.log(error.message);
+        setData(newData);
+        toast.info(response.data);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    } else {
+      toast.warning("Connectez-vous ajouté un favori");
     }
   };
 
@@ -61,7 +66,7 @@ const OfferPage = ({ authToken, handleLogin }) => {
         description: data.product_description,
       });
     } else {
-      alert("Connectez-vous pour acheter un produit");
+      toast.warning("Connectez-vous pour acheter un produit");
       setShowLogin(true);
     }
   };

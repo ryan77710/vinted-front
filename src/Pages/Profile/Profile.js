@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
+import { SpinnerRoundFilled } from "spinners-react";
 
 import IsLoading from "../../Components/Loading";
 
@@ -12,6 +14,7 @@ const Profile = ({ authToken }) => {
   const [data, setData] = useState({});
   const [description, setDescription] = useState("");
   const [picture, setPicture] = useState(null);
+  const [waitResponse, setWaitResponse] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +25,6 @@ const Profile = ({ authToken }) => {
           headers: { Authorization: `Bearer ${authToken}` },
         }
       );
-      console.log(response.data);
       setData(response.data);
       setIsLoading(false);
     };
@@ -34,22 +36,29 @@ const Profile = ({ authToken }) => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
-    if (picture) {
-      formData.append(`picture`, picture);
-    }
-    if (description) {
-      formData.append("description", description);
-    }
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}user/update`,
-      formData,
-      {
-        headers: { Authorization: `Bearer ${authToken}` },
-        "Content-Type": "multipart/form-data",
+    try {
+      setWaitResponse(true);
+      const formData = new FormData();
+      if (picture) {
+        formData.append(`picture`, picture);
       }
-    );
-    console.log(response.data);
+      if (description) {
+        formData.append("description", description);
+      }
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}user/update`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+          "Content-Type": "multipart/form-data",
+        }
+      );
+      toast.info(response.data.message);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setWaitResponse(false);
+    }
   };
 
   return (
@@ -68,7 +77,17 @@ const Profile = ({ authToken }) => {
                 )}
 
                 <label title="changé de photo de profile" htmlFor="picture">
-                  <FontAwesomeIcon icon="images" />
+                  {waitResponse ? (
+                    <SpinnerRoundFilled
+                      size={64}
+                      thickness={107}
+                      speed={100}
+                      color="#ff006a"
+                    />
+                  ) : (
+                    <FontAwesomeIcon icon="images" />
+                  )}
+
                   <input
                     id="picture"
                     name="picture"
@@ -109,8 +128,16 @@ const Profile = ({ authToken }) => {
                   Changé de mot de passe
                 </button>
               </div>
-
-              <button type="submit"> Sauvegardé</button>
+              {waitResponse ? (
+                <SpinnerRoundFilled
+                  size={64}
+                  thickness={107}
+                  speed={100}
+                  color="#ff006a"
+                />
+              ) : (
+                <button type="submit"> Sauvegardé</button>
+              )}
             </div>
           </form>
           <h2>Mes annonces</h2>

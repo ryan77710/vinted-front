@@ -13,6 +13,7 @@
 }
 .PublishPage h2 {
   margin-top: 30px;
+  margin-bottom: 10px;
   font-size: 25px;
 }
 
@@ -130,4 +131,16 @@
   color: white;
   margin-bottom: 60px;
   cursor: pointer;
+}
+.publish-error-message {
+  height: 87.5vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.publish-error-message p {
+  font-size: 3vw;
+  color: var(--blue-color);
 }

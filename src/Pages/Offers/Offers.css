@@ -21,3 +21,15 @@
 .Offers .update-button:hover {
   color: black;
 }
+.Offers .noOffer {
+  height: 85vh;
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Offers .noOffer p {
+  font-size: 5vw;
+  color: var(--blue-color);
+}

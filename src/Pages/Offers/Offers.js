@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import IsLoading from "../../Components/Loading";
 import HomeOfferItem from "../../Components/HomeOfferItem";
+import { toast } from "react-toastify";
 
 const Offers = ({ authToken }) => {
   let history = useHistory();
@@ -28,13 +29,26 @@ const Offers = ({ authToken }) => {
   }, [authToken]);
 
   const handleDeleteOfferClick = async (id) => {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/offer/delete`,
-      { id },
-      {
-        headers: { Authorization: `Bearer ${authToken}` },
-      }
-    );
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}offer/delete`,
+        { id },
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+      const tab = [...data];
+      tab.map((offer, index) => {
+        if (offer._id === id) {
+          tab.splice(index, 1);
+        }
+        return "";
+      });
+      setData(tab);
+      toast.info("Produit suprimmé");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <div>
@@ -55,6 +69,7 @@ const Offers = ({ authToken }) => {
                       title="Modifié l'annonce"
                       className="update-button"
                       icon="edit"
+                      onClick={() => history.push(`/offer/update/${offer._id}`)}
                     />
                     <FontAwesomeIcon
                       title="Suprimé l'annonce"
@@ -66,6 +81,13 @@ const Offers = ({ authToken }) => {
                 </HomeOfferItem>
               );
             })}
+            {data.length === 0 ? (
+              <div className="noOffer">
+                <p>Aucune annonce posté</p>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       )}

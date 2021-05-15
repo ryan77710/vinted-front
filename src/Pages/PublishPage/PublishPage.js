@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import DropZone from "../../Components/DropZone";
 import ShowPictures from "../../Components/ShowPictures";
+import { toast } from "react-toastify";
+import { SpinnerRoundFilled } from "spinners-react";
 
-const PublishPage = ({ authToken, redirect, setRedirect }) => {
+const PublishPage = ({ authToken }) => {
   let history = useHistory();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -15,8 +17,9 @@ const PublishPage = ({ authToken, redirect, setRedirect }) => {
   const [brand, setBrand] = useState("");
   const [condition, setCondition] = useState("");
   const [color, setColor] = useState("");
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState("");
   const [files, setFile] = useState();
+  const [waitResponse, setWaitResponse] = useState(false);
 
   const [showPictures, setShowPictures] = useState(false);
 
@@ -30,47 +33,60 @@ const PublishPage = ({ authToken, redirect, setRedirect }) => {
   const handlePriceChange = (event) => setPrice(event.target.value);
   const handleFileChange = (file) => setFile(file);
 
-  //a faire traiter le  back end pour les photos
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append(`picture${i}`, files[i]);
-    }
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("size", size);
-    formData.append("city", city);
-    formData.append("brand", brand);
-    formData.append("condition", condition);
-    formData.append("color", color);
-    formData.append("price", price);
-
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}offer/publish`,
-        formData,
-        {
-          headers: {
-            Authorization: "Bearer " + authToken,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log(response);
-    } catch (error) {
-      if (error.response.data.message) {
-        console.log(error.response.data);
-        alert(error.response.data.message);
-        // setRedirect(true);
-        // history.push("/user/login");
-      } else {
-        alert("echec un probleme a été detecter");
+    if (
+      title &&
+      description &&
+      size &&
+      city &&
+      brand &&
+      condition &&
+      color &&
+      price &&
+      files
+    ) {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append(`picture${i}`, files[i]);
       }
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("size", size);
+      formData.append("city", city);
+      formData.append("brand", brand);
+      formData.append("condition", condition);
+      formData.append("color", color);
+      formData.append("price", price);
+
+      try {
+        setWaitResponse(true);
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}offer/publish`,
+          formData,
+          {
+            headers: {
+              Authorization: "Bearer " + authToken,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        history.push("/offer/my-offers");
+        toast.info("Produit publié");
+      } catch (error) {
+        if (error.response.data.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error(error.message);
+          toast.error("echec un probleme a été detecter");
+        }
+      } finally {
+        setWaitResponse(false);
+      }
+    } else {
+      toast.error("Remplisser tous les champs");
     }
   };
-  console.log(files);
   return (
     <>
       {authToken ? (
@@ -165,18 +181,29 @@ const PublishPage = ({ authToken, redirect, setRedirect }) => {
               <label>
                 <p>Prix</p>
                 <input
-                  type="text"
+                  type="number"
                   value={price}
                   onChange={handlePriceChange}
                   placeholder="0.00€"
                 />
               </label>
             </div>
-            <button type="submit">Ajouter</button>
+            {waitResponse ? (
+              <SpinnerRoundFilled
+                size={64}
+                thickness={107}
+                speed={100}
+                color="#ff006a"
+              />
+            ) : (
+              <button type="submit">Ajouter</button>
+            )}
           </form>
         </div>
       ) : (
-        "Vous dever être connecter pour vendre des produits "
+        <div className="publish-error-message">
+          <p>"Vous dever être connecter pour vendre des produits "</p>
+        </div>
       )}
     </>
   );

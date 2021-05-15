@@ -1,13 +1,25 @@
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
+
 const Drawer = (props) => {
+  const [drawerHide, setDrawerHide] = useState(true);
   let history = useHistory();
-  const { showDrawer, setShowDrawer, handleLogOut } = props;
+  const { showDrawer, setShowDrawer, handleLogOut, authToken } = props;
+  useEffect(() => {
+    if (showDrawer) {
+      setDrawerHide(false);
+    }
+  }, [showDrawer]);
 
   return (
     <div
       onMouseLeave={() => setShowDrawer(false)}
-      className={`Drawer ${showDrawer ? "Drawer-active" : `Drawer-exit`}`}
+      className={`Drawer ${
+        showDrawer
+          ? "Drawer-active"
+          : ` ${drawerHide ? "hiden" : "Drawer-exit "}  `
+      }`}
     >
       <ul>
         <li
@@ -21,25 +33,43 @@ const Drawer = (props) => {
           <div className="iconHide"></div>
           <b></b>
         </li>
-        <li onClick={() => history.push("/offer/my-offers")}>
+        <li
+          onClick={() =>
+            authToken
+              ? history.push("/offer/my-offers")
+              : alert("Connecter-vous")
+          }
+        >
           <FontAwesomeIcon className="iconLi" icon="spinner" spin />
           <span> Mes annonces</span>
           <div className="iconHide"></div>
           <b></b>
         </li>
-        <li onClick={() => history.push("/user/profile")}>
+        <li
+          onClick={() =>
+            authToken ? history.push("/user/profile") : alert("Connecter-vous")
+          }
+        >
           <FontAwesomeIcon className="iconLi" icon="user" />
           <span>Mon profile</span>
           <div className="iconHide"></div>
           <b></b>
         </li>
-        <li onClick={() => history.push("/offer/favors")}>
+        <li
+          onClick={() =>
+            authToken ? history.push("/offer/favors") : alert("Connecter-vous")
+          }
+        >
           <FontAwesomeIcon className="iconLi" icon="heartbeat" />
           <span>Favoris</span>
           <div className="iconHide"></div>
           <b></b>
         </li>
-        <li onClick={() => history.push("/user/messages")}>
+        <li
+          onClick={() =>
+            authToken ? history.push("/user/messages") : alert("Connecter-vous")
+          }
+        >
           <FontAwesomeIcon className="iconLi" icon="comment-dots" />
           <span> Messages</span>
           <div className="iconHide"></div>

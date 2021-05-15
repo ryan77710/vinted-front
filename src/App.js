@@ -18,6 +18,7 @@ import Messages from "./Pages/Messages/Messages";
 import Offers from "./Pages/Offers/Offers";
 import Profile from "./Pages/Profile/Profile";
 import Support from "./Pages/Support/Support";
+import OfferUpdate from "./Pages/OfferUpdate/OfferUpdate";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -42,6 +43,7 @@ import {
   faTrashAlt,
   faEdit,
   faStar,
+  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Cookies from "js-cookie";
@@ -50,6 +52,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useDebounce } from "use-debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 library.add(
   faSearch,
@@ -72,7 +76,9 @@ library.add(
   faChevronDown,
   faTrashAlt,
   faEdit,
-  faStar
+  faStar,
+  faChevronUp,
+  faTimesCircle
 );
 
 function App() {
@@ -98,14 +104,11 @@ function App() {
     loadStripe(process.env.REACT_APP_STRIPEKEY)
   );
 
-  // redirection for PublishPage
-  const [redirect, setRedirect] = useState(false);
-  // chek for payment way
-  // ?
   const handleLogin = (token, user) => {
     Cookies.set("userToken", token, { expires: 7 });
     setAuthToken(token);
-    alert(`bonjour ${user}`);
+    toast.success("Autorisé");
+    toast(`Bonjour ${user}`);
   };
   const handleTitle = (event) => {
     const value = event.target.value;
@@ -124,6 +127,7 @@ function App() {
   const handleLogOut = () => {
     Cookies.remove("userToken");
     setAuthToken(null);
+    toast.warning("Déconnexion");
   };
 
   const handleFavoriteClick = async (offer) => {
@@ -143,8 +147,9 @@ function App() {
       });
 
       setData({ count: data.count, offers: tab });
+      toast.info(response.data);
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
   useEffect(() => {
@@ -177,7 +182,7 @@ function App() {
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message);
       }
     };
     fetchData();
@@ -185,6 +190,7 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer />
       <button
         title="Ouvrir le navigateur"
         className={`buttton-drawer ${showDrawer && "buttton-drawer-isActive"}`}
@@ -200,6 +206,7 @@ function App() {
       <Router>
         <Drawer
           showDrawer={showDrawer}
+          authToken={authToken}
           setShowDrawer={setShowDrawer}
           handleLogOut={handleLogOut}
         />
@@ -215,17 +222,16 @@ function App() {
         />
         <Switch>
           <Route exact path="/offer/publish">
-            <PublishPage
-              authToken={authToken}
-              redirect={redirect}
-              setRedirect={setRedirect}
-            ></PublishPage>
+            <PublishPage authToken={authToken}></PublishPage>
           </Route>
           <Route exact path="/offer/my-offers">
             <Offers authToken={authToken} />
           </Route>
           <Route exact path="/offer/favors">
             <Favors authToken={authToken} />
+          </Route>
+          <Route exact path="/offer/update/:id">
+            <OfferUpdate authToken={authToken} />
           </Route>
           <Route exact path="/offer/:id">
             <OfferPage
@@ -243,16 +249,11 @@ function App() {
             <SignUpPage handleLogin={handleLogin}></SignUpPage>
           </Route>
           <Route exact path="/user/login">
-            <LoginPage
-              handleLogin={handleLogin}
-              redirect={redirect}
-              setRedirect={setRedirect}
-              red={"/"}
-            ></LoginPage>
+            <LoginPage handleLogin={handleLogin}></LoginPage>
           </Route>
           <Route exact path="/payment/donation">
             <Elements stripe={stripePromise}>
-              <Donation />
+              <Donation authToken={authToken} />
             </Elements>
           </Route>
           <Route exact path="/paymentPage">
@@ -275,6 +276,7 @@ function App() {
               handleFavoriteClick={handleFavoriteClick}
               isLoading={isLoading}
               data={data}
+              priceValue={priceValue}
               limit={limit}
               handleLimitChange={handleLimitChange}
               page={page}

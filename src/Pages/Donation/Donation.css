@@ -54,3 +54,25 @@
   background-color: black;
   color: wheat;
 }
+.Donation .error-message {
+  margin-top: 10px;
+  color: red;
+  text-align: center;
+}
+.Donation .donation-succeeded {
+  height: 87.3vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.Donation .donation-succeeded p {
+  margin-bottom: 20px;
+  color: var(--blue-color);
+  font-size: 5vw;
+}
+.Donation .donation-succeeded button {
+  color: aliceblue;
+  font-size: 20px;
+}

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
+
 const LoginPage = (props) => {
   const history = useHistory();
-  const { handleLogin, redirect, setRedirect, red } = props;
+  const { handleLogin } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,19 +19,13 @@ const LoginPage = (props) => {
           password: password,
         }
       );
-      console.log(response);
       const token = response.data.token;
       const user = response.data.account.username;
       handleLogin(token, user);
-      if (redirect) {
-        history.push("/offer/publish");
-        setRedirect(false);
-      } else {
-        history.push(red);
-      }
+
+      history.push("/");
     } catch (error) {
-      console.log(error.message);
-      alert("mission fail sniff || retry to connect");
+      toast.error(error.message);
     }
   };
   const handleEmailChange = (event) => {

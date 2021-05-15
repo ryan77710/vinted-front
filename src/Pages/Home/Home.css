@@ -126,6 +126,12 @@
   object-position: center;
   cursor: pointer;
 }
+.homeOfferItem > img:nth-child(2):hover {
+  filter: contrast(347%) invert(88%);
+  -webkit-filter: contrast(347%) invert(88%);
+  -moz-filter: contrast(347%) invert(88%);
+  transition: 1.5s;
+}
 .homeOfferItem > div:nth-child(3) {
   margin-top: 13px;
   position: relative;
