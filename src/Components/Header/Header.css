@@ -121,6 +121,10 @@ header button {
   cursor: pointer;
   border-radius: 5px;
 }
+header button:hover {
+  color: white;
+  background-color: var(--blue-color);
+}
 header div + button {
   margin-right: 20px;
 }
@@ -134,4 +138,9 @@ header .log-out-color {
   background-color: #ff006a;
   color: white;
   border: none;
+}
+header .log-out-color:hover {
+  border: 1px solid #ff006a;
+  background-color: white;
+  color: #ff006a;
 }

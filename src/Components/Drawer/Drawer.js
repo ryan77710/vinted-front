@@ -51,7 +51,7 @@ const Drawer = (props) => {
           }
         >
           <FontAwesomeIcon className="iconLi" icon="user" />
-          <span>Mon profile</span>
+          <span>Mon profil</span>
           <div className="iconHide"></div>
           <b></b>
         </li>

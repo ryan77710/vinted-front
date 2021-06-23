@@ -10,27 +10,38 @@ import { toast } from "react-toastify";
 
 const OfferPage = ({ authToken, handleLogin }) => {
   const history = useHistory();
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
+  const [dontExists, setDontExists] = useState(false);
+  const [error, setError] = useState(false);
 
   const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       let response;
-      if (authToken) {
-        response = await axios.get(
-          `${process.env.REACT_APP_API_URL}offer-auth/${id}`,
-          { headers: { Authorization: `Bearer ${authToken}` } }
-        );
-      } else {
-        response = await axios.get(
-          `${process.env.REACT_APP_API_URL}offer/${id}`
-        );
+      try {
+        if (authToken) {
+          response = await axios.get(
+            `${process.env.REACT_APP_API_URL}offer-auth/${id}`,
+            { headers: { Authorization: `Bearer ${authToken}` } }
+          );
+        } else {
+          response = await axios.get(
+            `${process.env.REACT_APP_API_URL}offer/${id}`
+          );
+        }
+        setData(response.data);
+      } catch (error) {
+        if (error.response.data.message === "Cette annonce existe plus") {
+          setDontExists(true);
+        } else {
+          setError(true);
+        }
+      } finally {
+        setIsLoading(false);
       }
-      setData(response.data);
-      setIsLoading(false);
     };
     fetchData();
   }, [id, authToken]);
@@ -78,66 +89,86 @@ const OfferPage = ({ authToken, handleLogin }) => {
       {isLoading === true ? (
         <Loading></Loading>
       ) : (
-        <div className="OfferPage">
-          <main>
-            <CarouselPicture
-              picture={data.product_image.url}
-              pictures={data.product_picture}
-              favorite={data.favorite}
-              iconOnClick={handleFavOfferClick}
-            />
+        <>
+          {data ? (
+            <div className="OfferPage">
+              <main>
+                <CarouselPicture
+                  picture={data.product_image.url}
+                  pictures={data.product_picture}
+                  favorite={data.favorite}
+                  iconOnClick={handleFavOfferClick}
+                />
 
-            <div className="Offer-page-detail">
-              <div>
-                <div>{data.product_price} €</div>
+                <div className="Offer-page-detail">
+                  <div>
+                    <div>{data.product_price} €</div>
 
-                <div>
-                  <p>MARQUE</p>
-                  {data.product_details[0].MARQUE}
+                    <div>
+                      <p>MARQUE</p>
+                      {data.product_details[0].MARQUE}
+                    </div>
+                    <div>
+                      <p>TAILLE</p>
+                      {data.product_details[1].TAILLE}
+                    </div>
+                    <div>
+                      <p>ETAT</p>
+                      {data.product_details[2].ETAT}
+                    </div>
+                    <div>
+                      <p>COULEUR</p>
+                      {data.product_details[3].COULEUR}
+                    </div>
+                    <div>
+                      <p>EMPLACEMENT</p>
+                      {data.product_details[4].EMPLACEMENT}
+                    </div>
+                    <div>
+                      <p>MODES DE PAIEMENT</p> <b>CARTE DE PAIMENT,PAYPAL</b>
+                    </div>
+                  </div>
+                  <div>
+                    <b>{data.product_name}</b>
+                    <p>{data.product_description}</p>
+                    <div>
+                      <img
+                        src={data.owner.account.avatar.url}
+                        alt={data.owner.account.username}
+                      />
+                      <span>{data.owner.account.username}</span>
+                    </div>
+                    <button onClick={handlePayclick}>Acheter</button>
+                  </div>
                 </div>
-                <div>
-                  <p>TAILLE</p>
-                  {data.product_details[1].TAILLE}
+              </main>
+              {showLogin === false ? (
+                ""
+              ) : (
+                <div className="Unauthorized">
+                  <LoginPage color="red" handleLogin={handleLogin}></LoginPage>
+                  <button onClick={handleCloseclick}>Fermer</button>
                 </div>
-                <div>
-                  <p>ETAT</p>
-                  {data.product_details[2].ETAT}
-                </div>
-                <div>
-                  <p>COULEUR</p>
-                  {data.product_details[3].COULEUR}
-                </div>
-                <div>
-                  <p>EMPLACEMENT</p>
-                  {data.product_details[4].EMPLACEMENT}
-                </div>
-                <div>
-                  <p>MODES DE PAIEMENT</p> <b>CARTE DE PAIMENT,PAYPAL</b>
-                </div>
-              </div>
-              <div>
-                <b>{data.product_name}</b>
-                <p>{data.product_description}</p>
-                <div>
-                  <img
-                    src={data.owner.account.avatar.url}
-                    alt={data.owner.account.username}
-                  />
-                  <span>{data.owner.account.username}</span>
-                </div>
-                <button onClick={handlePayclick}>Acheter</button>
-              </div>
+              )}
             </div>
-          </main>
-          {showLogin === false ? (
-            ""
           ) : (
-            <div className="Unauthorized">
-              <LoginPage color="red" handleLogin={handleLogin}></LoginPage>
-              <button onClick={handleCloseclick}>Fermer</button>
-            </div>
+            ""
           )}
-        </div>
+          {dontExists ? (
+            <div className="offer-error-message">
+              <p>Cette annonce n'existe plus</p>
+            </div>
+          ) : (
+            ""
+          )}
+          {error ? (
+            <div className="offer-error-message">
+              <p>Une erreur est survenue</p>
+            </div>
+          ) : (
+            ""
+          )}
+        </>
       )}
     </>
   );

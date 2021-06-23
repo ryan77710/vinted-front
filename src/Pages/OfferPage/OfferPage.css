@@ -160,3 +160,13 @@
   border: none;
   font-size: 20px;
 }
+.offer-error-message {
+  min-height: 87.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.offer-error-message p {
+  font-size: 5vw;
+  color: var(--blue-color);
+}

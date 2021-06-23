@@ -135,7 +135,6 @@ const OfferUpdate = ({ authToken }) => {
     }
     try {
       setWaitResponse(true);
-      // priceStatus = is a number =(5) , is not a number =(heyh) ,dont-exist (data in useState)
       let priceStatus;
       let regex = new RegExp("^[0-9]*$");
       const sendData = {
