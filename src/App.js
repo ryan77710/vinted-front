@@ -86,9 +86,7 @@ function App() {
   const [data, setData] = useState();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [authToken, setAuthToken] = useState(
-    Cookies.get("userToken", token) || null
-  );
+  const [authToken, setAuthToken] = useState(Cookies.get("userToken", token) || null);
 
   const [showDrawer, setShowDrawer] = useState(false);
 
@@ -100,9 +98,7 @@ function App() {
   const [page, setPage] = useState(1);
   const [limit, setLimite] = useState(100);
 
-  const [stripePromise] = useState(() =>
-    loadStripe(process.env.REACT_APP_STRIPEKEY)
-  );
+  const [stripePromise] = useState(() => loadStripe(process.env.REACT_APP_STRIPEKEY));
 
   const handleLogin = (token, user) => {
     Cookies.set("userToken", token, { expires: 7 });
@@ -132,11 +128,7 @@ function App() {
 
   const handleFavoriteClick = async (offer) => {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}offer/favorite`,
-        offer,
-        { headers: { Authorization: `Bearer ${authToken}` } }
-      );
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}offer/favorite`, offer, { headers: { Authorization: `Bearer ${authToken}` } });
       const tab = [...data.offers];
 
       tab.map((dataOffer) => {
@@ -158,11 +150,7 @@ function App() {
       try {
         if (authToken) {
           response = await axios.get(
-            `${
-              process.env.REACT_APP_API_URL
-            }offers-auth?title=${titleDebouced}&sort=${
-              toggleOrder ? "price-asc" : "price-desc"
-            }&priceMin=${priceValue[0]}&priceMax=${
+            `${process.env.REACT_APP_API_URL}offers-auth?title=${titleDebouced}&sort=${toggleOrder ? "price-asc" : "price-desc"}&priceMin=${priceValue[0]}&priceMax=${
               priceValue[1]
             }&page=${page}&limit=${limit}`,
 
@@ -170,11 +158,7 @@ function App() {
           );
         } else {
           response = await axios.get(
-            `${
-              process.env.REACT_APP_API_URL
-            }offers?title=${titleDebouced}&sort=${
-              toggleOrder ? "price-asc" : "price-desc"
-            }&priceMin=${priceValue[0]}&priceMax=${
+            `${process.env.REACT_APP_API_URL}offers?title=${titleDebouced}&sort=${toggleOrder ? "price-asc" : "price-desc"}&priceMin=${priceValue[0]}&priceMax=${
               priceValue[1]
             }&page=${page}&limit=${limit}`
           );
@@ -191,25 +175,11 @@ function App() {
   return (
     <div className="App">
       <ToastContainer />
-      <button
-        title="Ouvrir le navigateur"
-        className={`buttton-drawer ${showDrawer && "buttton-drawer-isActive"}`}
-        onClick={() => setShowDrawer(!showDrawer)}
-      >
-        <FontAwesomeIcon
-          icon={showDrawer ? "times-circle" : "bars"}
-          className={`icon-drawer ${showDrawer && "icon-isActive"}`}
-          inverse
-          spin
-        />
+      <button title="Ouvrir le navigateur" className={`buttton-drawer ${showDrawer && "buttton-drawer-isActive"}`} onClick={() => setShowDrawer(!showDrawer)}>
+        <FontAwesomeIcon icon={showDrawer ? "times-circle" : "bars"} className={`icon-drawer ${showDrawer && "icon-isActive"}`} inverse spin />
       </button>
       <Router>
-        <Drawer
-          showDrawer={showDrawer}
-          authToken={authToken}
-          setShowDrawer={setShowDrawer}
-          handleLogOut={handleLogOut}
-        />
+        <Drawer showDrawer={showDrawer} authToken={authToken} setShowDrawer={setShowDrawer} handleLogOut={handleLogOut} />
         <Header
           handleLogOut={handleLogOut}
           authToken={authToken}
@@ -234,10 +204,7 @@ function App() {
             <OfferUpdate authToken={authToken} />
           </Route>
           <Route exact path="/offer/:id">
-            <OfferPage
-              authToken={authToken}
-              handleLogin={handleLogin}
-            ></OfferPage>
+            <OfferPage authToken={authToken} handleLogin={handleLogin}></OfferPage>
           </Route>
           <Route exact path="/user/messages">
             <Messages />

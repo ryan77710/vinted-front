@@ -5,15 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Home = (props) => {
   let history = useHistory();
-  const {
-    isLoading,
-    data,
-    page,
-    limit,
-    handleFavoriteClick,
-    handleLimitChange,
-    handlePageChange,
-  } = props;
+  const { isLoading, data, page, limit, handleFavoriteClick, handleLimitChange, handlePageChange } = props;
   let counteur = 0;
 
   return (
@@ -44,12 +36,7 @@ const Home = (props) => {
                     offer={offer}
                     onClick={() => history.push(`/offer/${offer._id}`)}
                   >
-                    <FontAwesomeIcon
-                      onClick={() => handleFavoriteClick(offer)}
-                      icon="heartbeat"
-                      className="favorite"
-                      color={offer.favorite === true ? "#ff006a" : "lightgrey"}
-                    />
+                    <FontAwesomeIcon onClick={() => handleFavoriteClick(offer)} icon="heartbeat" className="favorite" color={offer.favorite === true ? "#ff006a" : "lightgrey"} />
                   </HomeOfferItem>
                 );
               })}

@@ -4,7 +4,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  background-image: url("https://www.vinted.fr/assets/seller-promotion/default/banner_wide-057c3bafd7e0dbe2f8d69df7e51192d9a15ffd002eca2b01364fb7b08bb9a52d.jpg");
+  background-image: url("https://www.vinted.fr/assets/seller-promotion/other/banner_wide-9b45d0aa9a311c4ff6013e9cf3bc2b6646468be3d2f553192c63598685fcc177.jpg");
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center;
@@ -62,10 +62,8 @@
   position: relative;
 }
 .slide-in-elliptic-top-fwd {
-  -webkit-animation: slide-in-elliptic-top-fwd 3.7s
-    cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  animation: slide-in-elliptic-top-fwd 3.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-    both;
+  -webkit-animation: slide-in-elliptic-top-fwd 3.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: slide-in-elliptic-top-fwd 3.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 @-webkit-keyframes slide-in-elliptic-top-fwd {
